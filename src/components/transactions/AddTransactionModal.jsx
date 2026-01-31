@@ -133,10 +133,10 @@ const AddTransactionModal = ({ isOpen, onClose, editTransaction = null }) => {
         >
             <Tab.Group selectedIndex={selectedTab} onChange={handleTabChange}>
                 {!editTransaction && (
-                    <Tab.List className="flex gap-2 mb-6">
+                    <Tab.List className="flex gap-2 mb-4 sm:mb-6">
                         <Tab
                             className={({ selected }) =>
-                                `flex-1 py-2.5 text-sm font-medium rounded-lg transition-all focus:outline-none ${selected
+                                `flex-1 py-2 sm:py-2.5 text-sm font-medium rounded-lg transition-all focus:outline-none ${selected
                                     ? 'bg-success-600 text-white shadow'
                                     : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                                 }`
@@ -146,7 +146,7 @@ const AddTransactionModal = ({ isOpen, onClose, editTransaction = null }) => {
                         </Tab>
                         <Tab
                             className={({ selected }) =>
-                                `flex-1 py-2.5 text-sm font-medium rounded-lg transition-all focus:outline-none ${selected
+                                `flex-1 py-2 sm:py-2.5 text-sm font-medium rounded-lg transition-all focus:outline-none ${selected
                                     ? 'bg-danger-600 text-white shadow'
                                     : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                                 }`
@@ -158,7 +158,7 @@ const AddTransactionModal = ({ isOpen, onClose, editTransaction = null }) => {
                 )}
 
                 <form onSubmit={handleSubmit}>
-                    <div className="space-y-4">
+                    <div className="space-y-3 sm:space-y-4">
                         <Input
                             label="Amount"
                             type="number"
@@ -205,7 +205,7 @@ const AddTransactionModal = ({ isOpen, onClose, editTransaction = null }) => {
                         />
                     </div>
 
-                    <div className="flex gap-3 mt-6 pt-6 border-t border-neutral-200">
+                    <div className="flex flex-col sm:flex-row gap-3 mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-neutral-200">
                         <Button
                             type="button"
                             variant="outline"

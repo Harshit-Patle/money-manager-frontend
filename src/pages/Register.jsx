@@ -69,15 +69,15 @@ const Register = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-success-50 flex items-center justify-center p-4">
             <div className="w-full max-w-md">
-                <div className="text-center mb-8">
-                    <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl mb-4">
-                        <span className="text-white font-bold text-2xl">₹</span>
+                <div className="text-center mb-6 sm:mb-8">
+                    <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl mb-3 sm:mb-4">
+                        <span className="text-white font-bold text-xl sm:text-2xl">₹</span>
                     </div>
-                    <h1 className="text-3xl font-display font-bold text-neutral-900 mb-2">Money Manager</h1>
-                    <p className="text-neutral-600">Create your account to get started</p>
+                    <h1 className="text-2xl sm:text-3xl font-display font-bold text-neutral-900 mb-2">Money Manager</h1>
+                    <p className="text-sm sm:text-base text-neutral-600">Create your account to get started</p>
                 </div>
 
-                <div className="bg-white rounded-xl shadow-lg p-8 border border-neutral-200">
+                <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 border border-neutral-200">
                     <form onSubmit={handleSubmit} className="space-y-5">
                         <div className="grid grid-cols-2 gap-4">
                             <Input

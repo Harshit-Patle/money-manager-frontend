@@ -5,16 +5,16 @@ const CategorySummary = () => {
 
     if (categorySummary.length === 0) {
         return (
-            <div className="bg-white border border-neutral-200 rounded-lg p-8 text-center">
-                <p className="text-neutral-500">No category data available</p>
+            <div className="bg-white border border-neutral-200 rounded-lg p-6 sm:p-8 text-center">
+                <p className="text-sm sm:text-base text-neutral-500">No category data available</p>
             </div>
         );
     }
 
     return (
-        <div className="bg-white border border-neutral-200 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-neutral-900 mb-4">Category Summary</h3>
-            <div className="space-y-3">
+        <div className="bg-white border border-neutral-200 rounded-lg p-4 sm:p-6">
+            <h3 className="text-base sm:text-lg font-semibold text-neutral-900 mb-3 sm:mb-4">Category Summary</h3>
+            <div className="space-y-2 sm:space-y-3">
                 {categorySummary.map((item) => {
                     const total = item.totalExpense || item.totalIncome;
                     const isExpense = item.totalExpense > 0;

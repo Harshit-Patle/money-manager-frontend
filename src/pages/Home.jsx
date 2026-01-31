@@ -27,19 +27,19 @@ const Home = () => {
 
     return (
         <PageWrapper>
-            <div className="space-y-6">
-                <div className="flex items-center justify-between">
+            <div className="space-y-4 sm:space-y-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
-                        <h1 className="text-2xl font-display font-bold text-neutral-900">Transactions</h1>
-                        <p className="text-neutral-600 mt-1">View and manage your income and expenses</p>
+                        <h1 className="text-xl sm:text-2xl font-display font-bold text-neutral-900">Transactions</h1>
+                        <p className="text-sm sm:text-base text-neutral-600 mt-1">View and manage your income and expenses</p>
                     </div>
                     <Button
                         variant="primary"
                         onClick={handleAddClick}
-                        className="flex items-center gap-2"
+                        className="flex items-center justify-center gap-2 w-full sm:w-auto"
                     >
                         <PlusIcon className="w-5 h-5" />
-                        Add Transaction
+                        <span>Add Transaction</span>
                     </Button>
                 </div>
 

@@ -26,7 +26,7 @@ const Modal = ({ isOpen, onClose, title, children, size = 'md' }) => {
                 </Transition.Child>
 
                 <div className="fixed inset-0 overflow-y-auto">
-                    <div className="flex min-h-full items-center justify-center p-4">
+                    <div className="flex min-h-full items-center justify-center p-3 sm:p-4">
                         <Transition.Child
                             as={Fragment}
                             enter="ease-out duration-300"
@@ -37,8 +37,8 @@ const Modal = ({ isOpen, onClose, title, children, size = 'md' }) => {
                             leaveTo="opacity-0 scale-95"
                         >
                             <Dialog.Panel className={`w-full ${sizes[size]} transform overflow-hidden rounded-xl bg-white shadow-xl transition-all`}>
-                                <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-200">
-                                    <Dialog.Title className="text-lg font-semibold text-neutral-900">
+                                <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-neutral-200">
+                                    <Dialog.Title className="text-base sm:text-lg font-semibold text-neutral-900">
                                         {title}
                                     </Dialog.Title>
                                     <button
@@ -48,7 +48,7 @@ const Modal = ({ isOpen, onClose, title, children, size = 'md' }) => {
                                         <XMarkIcon className="w-5 h-5" />
                                     </button>
                                 </div>
-                                <div className="px-6 py-4">
+                                <div className="px-4 sm:px-6 py-3 sm:py-4">
                                     {children}
                                 </div>
                             </Dialog.Panel>

@@ -15,8 +15,8 @@ const Filters = () => {
     const hasActiveFilters = Object.values(filters).some(v => v);
 
     return (
-        <div className="bg-white rounded-lg border border-neutral-200 p-4">
-            <div className="flex items-center gap-2 mb-4">
+        <div className="bg-white rounded-lg border border-neutral-200 p-3 sm:p-4">
+            <div className="flex items-center gap-2 mb-3 sm:mb-4">
                 <FunnelIcon className="w-5 h-5 text-neutral-400" />
                 <h3 className="text-sm font-semibold text-neutral-900">Filters</h3>
                 {hasActiveFilters && (
@@ -32,7 +32,7 @@ const Filters = () => {
                 )}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 <Select
                     label="Category"
                     options={CATEGORIES}

@@ -31,22 +31,22 @@ const TransactionItem = ({ transaction, onEdit }) => {
     };
 
     return (
-        <div className="bg-white border border-neutral-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-            <div className="flex items-start justify-between">
+        <div className="bg-white border border-neutral-200 rounded-lg p-3 sm:p-4 hover:shadow-md transition-shadow">
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                 <div className="flex items-start gap-3 flex-1">
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${isIncome ? 'bg-success-100' : 'bg-danger-100'
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${isIncome ? 'bg-success-100' : 'bg-danger-100'
                         }`}>
                         <BanknotesIcon className={`w-5 h-5 ${isIncome ? 'text-success-600' : 'text-danger-600'
                             }`} />
                     </div>
 
-                    <div className="flex-1">
-                        <div className="flex items-start justify-between mb-1">
-                            <div>
+                    <div className="flex-1 min-w-0">
+                        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-1">
+                            <div className="flex-1">
                                 <h4 className="text-sm font-semibold text-neutral-900">{transaction.category}</h4>
                                 <p className="text-xs text-neutral-500 mt-0.5">{formatDateTime(transaction.createdAt)}</p>
                             </div>
-                            <div className="text-right">
+                            <div className="text-left sm:text-right">
                                 <p className={`text-lg font-bold ${isIncome ? 'text-success-600' : 'text-danger-600'
                                     }`}>
                                     {isIncome ? '+' : '-'}₹{transaction.amount.toLocaleString('en-IN')}
@@ -75,7 +75,7 @@ const TransactionItem = ({ transaction, onEdit }) => {
                     </div>
                 </div>
 
-                <div className="flex items-center gap-2 ml-4">
+                <div className="flex items-center gap-2 sm:ml-4 justify-end sm:justify-start">
                     {canEdit ? (
                         <>
                             <Button

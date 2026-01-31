@@ -78,12 +78,12 @@ const Transfer = () => {
     return (
         <PageWrapper>
             <div className="max-w-2xl">
-                <div className="mb-6">
-                    <h1 className="text-2xl font-display font-bold text-neutral-900">Account Transfer</h1>
-                    <p className="text-neutral-600 mt-1">Transfer money between your accounts</p>
+                <div className="mb-4 sm:mb-6">
+                    <h1 className="text-xl sm:text-2xl font-display font-bold text-neutral-900">Account Transfer</h1>
+                    <p className="text-sm sm:text-base text-neutral-600 mt-1">Transfer money between your accounts</p>
                 </div>
 
-                <div className="bg-white border border-neutral-200 rounded-lg p-6">
+                <div className="bg-white border border-neutral-200 rounded-lg p-4 sm:p-6">
                     {success && (
                         <div className="mb-6 bg-success-50 border border-success-200 rounded-lg p-4 flex items-start gap-3">
                             <CheckCircleIcon className="w-5 h-5 text-success-600 flex-shrink-0 mt-0.5" />
@@ -96,8 +96,8 @@ const Transfer = () => {
                         </div>
                     )}
 
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
+                    <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+                        <div className="grid grid-cols-1 gap-4 items-end">
                             <Select
                                 label="From Account"
                                 options={ACCOUNTS}

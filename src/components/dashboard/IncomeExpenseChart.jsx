@@ -39,16 +39,16 @@ const IncomeExpenseChart = () => {
 
     if (chartData.length === 0) {
         return (
-            <div className="bg-white border border-neutral-200 rounded-lg p-8 text-center">
-                <p className="text-neutral-500">No data available for chart</p>
+            <div className="bg-white border border-neutral-200 rounded-lg p-6 sm:p-8 text-center">
+                <p className="text-sm sm:text-base text-neutral-500">No data available for chart</p>
             </div>
         );
     }
 
     return (
-        <div className="bg-white border border-neutral-200 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-neutral-900 mb-6">Income vs Expense by Category</h3>
-            <ResponsiveContainer width="100%" height={350}>
+        <div className="bg-white border border-neutral-200 rounded-lg p-4 sm:p-6">
+            <h3 className="text-base sm:text-lg font-semibold text-neutral-900 mb-4 sm:mb-6">Income vs Expense by Category</h3>
+            <ResponsiveContainer width="100%" height={300} className="sm:h-[350px]">
                 <BarChart data={chartData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
                     <XAxis
