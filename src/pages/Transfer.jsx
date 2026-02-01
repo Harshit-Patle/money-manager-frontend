@@ -5,7 +5,7 @@ import Select from '../components/common/Select';
 import Button from '../components/common/Button';
 import { useTransactions } from '../hooks/useTransactions';
 import { ACCOUNTS } from '../utils/constants';
-import { ArrowRightIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
+import { ArrowDownIcon,ArrowRightIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 
 const Transfer = () => {
     const { transferBetweenAccounts } = useTransactions();
@@ -107,8 +107,8 @@ const Transfer = () => {
                                 required
                             />
 
-                            <div className="hidden md:flex items-center justify-center pb-2">
-                                <ArrowRightIcon className="w-6 h-6 text-neutral-400" />
+                            <div className="hidden md:flex items-center justify-center p-4">
+                                <ArrowDownIcon className="w-6 h-6 text-neutral-400" />
                             </div>
 
                             <Select
