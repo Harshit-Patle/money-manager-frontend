@@ -1,9 +1,33 @@
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { useTransactions } from '../../hooks/useTransactions';
 
-const CategorySummary = () => {
-    const { categorySummary } = useTransactions();
+const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4', '#84cc16', '#f97316', '#6366f1'];
 
-    if (categorySummary.length === 0) {
+const CategorySummary = () => {
+    const { allTransactions = [] } = useTransactions();
+
+    // Calculate category data from all transactions
+    const getCategoryData = () => {
+        if (!allTransactions || allTransactions.length === 0) {
+            return [];
+        }
+
+        const categoryMap = {};
+
+        allTransactions.forEach(t => {
+            if (!categoryMap[t.category]) {
+                categoryMap[t.category] = { name: t.category, value: 0 };
+            }
+            categoryMap[t.category].value += t.amount;
+        });
+
+        return Object.values(categoryMap).sort((a, b) => b.value - a.value);
+    };
+
+    const categoryData = getCategoryData();
+    const totalAmount = categoryData.reduce((sum, cat) => sum + cat.value, 0);
+
+    if (categoryData.length === 0) {
         return (
             <div className="bg-white border border-neutral-200 rounded-lg p-6 sm:p-8 text-center">
                 <p className="text-sm sm:text-base text-neutral-500">No category data available</p>
@@ -11,25 +35,85 @@ const CategorySummary = () => {
         );
     }
 
+    const CustomTooltip = ({ active, payload }) => {
+        if (active && payload && payload.length) {
+            const percentage = ((payload[0].value / totalAmount) * 100).toFixed(1);
+            return (
+                <div className="bg-white border border-neutral-200 rounded-lg p-3 shadow-lg">
+                    <p className="text-sm font-semibold text-neutral-900">{payload[0].name}</p>
+                    <p className="text-sm text-neutral-600">
+                        ₹{payload[0].value.toLocaleString('en-IN')} ({percentage}%)
+                    </p>
+                </div>
+            );
+        }
+        return null;
+    };
+
     return (
         <div className="bg-white border border-neutral-200 rounded-lg p-4 sm:p-6">
-            <h3 className="text-base sm:text-lg font-semibold text-neutral-900 mb-3 sm:mb-4">Category Summary</h3>
-            <div className="space-y-2 sm:space-y-3">
-                {categorySummary.map((item) => {
-                    const total = item.totalExpense || item.totalIncome;
-                    const isExpense = item.totalExpense > 0;
+            <div className="mb-4">
+                <h3 className="text-base sm:text-lg font-semibold text-neutral-900">Category Summary</h3>
+                <p className="text-xs text-neutral-500 mt-1">Total: ₹{totalAmount.toLocaleString('en-IN')}</p>
+            </div>
+            
+            <div className="flex justify-center">
+                <ResponsiveContainer width="100%" height={240}>
+                    <PieChart>
+                        <Pie
+                            data={categoryData}
+                            cx="50%"
+                            cy="50%"
+                            labelLine={false}
+                            label={false}
+                            outerRadius={95}
+                            innerRadius={55}
+                            fill="#8884d8"
+                            dataKey="value"
+                            paddingAngle={2}
+                        >
+                            {categoryData.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                            ))}
+                        </Pie>
+                        <Tooltip content={<CustomTooltip />} />
+                    </PieChart>
+                </ResponsiveContainer>
+            </div>
 
+            <div className="mt-4 space-y-1.5">
+                {categoryData.map((item, index) => {
+                    const percentage = ((item.value / totalAmount) * 100).toFixed(1);
+                    
                     return (
-                        <div key={item.category} className="flex items-center justify-between py-2 border-b border-neutral-100 last:border-0">
-                            <div className="flex items-center gap-3">
-                                <div className={`w-2 h-2 rounded-full ${isExpense ? 'bg-danger-500' : 'bg-success-500'
-                                    }`} />
-                                <span className="text-sm font-medium text-neutral-900">{item.category}</span>
+                        <div 
+                            key={item.name} 
+                            className="flex items-center gap-3 p-2 rounded-lg hover:bg-neutral-50 transition-colors"
+                        >
+                            <div 
+                                className="w-4 h-4 rounded flex-shrink-0" 
+                                style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                            />
+                            <div className="flex-1 min-w-0">
+                                <p className="text-sm font-medium text-neutral-900 truncate">{item.name}</p>
+                                <div className="flex items-center gap-2 mt-0.5">
+                                    <div className="flex-1 bg-neutral-200 rounded-full h-1.5 overflow-hidden">
+                                        <div 
+                                            className="h-full rounded-full transition-all"
+                                            style={{ 
+                                                width: `${percentage}%`,
+                                                backgroundColor: COLORS[index % COLORS.length]
+                                            }}
+                                        />
+                                    </div>
+                                </div>
                             </div>
-                            <div className="text-right">
-                                <p className={`text-sm font-semibold ${isExpense ? 'text-danger-600' : 'text-success-600'
-                                    }`}>
-                                    {isExpense ? '-' : '+'}₹{total.toLocaleString('en-IN')}
+                            <div className="text-right flex-shrink-0">
+                                <p className="text-sm font-semibold text-neutral-700">
+                                    ₹{item.value.toLocaleString('en-IN')}
+                                </p>
+                                <p className="text-xs text-neutral-500">
+                                    {percentage}%
                                 </p>
                             </div>
                         </div>

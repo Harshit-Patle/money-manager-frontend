@@ -76,38 +76,26 @@ const TransactionItem = ({ transaction, onEdit }) => {
                 </div>
 
                 <div className="flex items-center gap-2 sm:ml-4 justify-end sm:justify-start">
-                    {canEdit ? (
-                        <>
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => onEdit(transaction)}
-                                className="flex items-center gap-1"
-                                title={`${hoursRemaining}h remaining to edit`}
-                            >
-                                <PencilIcon className="w-4 h-4" />
-                            </Button>
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={handleDelete}
-                                disabled={deleting}
-                                className="flex items-center gap-1 text-danger-600 hover:bg-danger-50"
-                            >
-                                <TrashIcon className="w-4 h-4" />
-                            </Button>
-                        </>
-                    ) : (
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={handleDelete}
-                            disabled={deleting}
-                            className="flex items-center gap-1 text-danger-600 hover:bg-danger-50"
-                        >
-                            <TrashIcon className="w-4 h-4" />
-                        </Button>
-                    )}
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => onEdit(transaction)}
+                        disabled={!canEdit}
+                        className="flex items-center gap-1"
+                        title={canEdit ? `${hoursRemaining}h remaining to edit` : 'Edit time expired'}
+                    >
+                        <PencilIcon className="w-4 h-4" />
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={handleDelete}
+                        disabled={deleting || !canEdit}
+                        className="flex items-center gap-1 text-danger-600 hover:bg-danger-50"
+                        title={canEdit ? `${hoursRemaining}h remaining to delete` : 'Delete time expired'}
+                    >
+                        <TrashIcon className="w-4 h-4" />
+                    </Button>
                 </div>
             </div>
         </div>

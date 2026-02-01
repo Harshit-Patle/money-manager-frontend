@@ -3,6 +3,7 @@ import PageWrapper from '../components/layout/PageWrapper';
 import TransactionList from '../components/transactions/TransactionList';
 import AddTransactionModal from '../components/transactions/AddTransactionModal';
 import Filters from '../components/transactions/Filters';
+import CategorySummary from '../components/dashboard/CategorySummary';
 import Button from '../components/common/Button';
 import { PlusIcon } from '@heroicons/react/24/outline';
 
@@ -45,7 +46,14 @@ const Home = () => {
 
                 <Filters />
 
-                <TransactionList onEdit={handleEdit} />
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="lg:col-span-2">
+                        <TransactionList onEdit={handleEdit} />
+                    </div>
+                    <div className="lg:col-span-1">
+                        <CategorySummary />
+                    </div>
+                </div>
 
                 <AddTransactionModal
                     isOpen={isModalOpen}
