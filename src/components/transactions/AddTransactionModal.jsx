@@ -147,7 +147,7 @@ const AddTransactionModal = ({ isOpen, onClose, editTransaction = null }) => {
                         <Tab
                             className={({ selected }) =>
                                 `flex-1 py-2 sm:py-2.5 text-sm font-medium rounded-lg transition-all focus:outline-none ${selected
-                                    ? 'bg-danger-600 text-white shadow'
+                                    ? 'bg-orange-500 text-white shadow'
                                     : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                                 }`
                             }
@@ -217,7 +217,7 @@ const AddTransactionModal = ({ isOpen, onClose, editTransaction = null }) => {
                         </Button>
                         <Button
                             type="submit"
-                            variant={selectedTab === 0 ? 'success' : 'danger'}
+                            variant={selectedTab === 0 ? 'success' : 'warning'}
                             className="flex-1"
                             disabled={loading}
                         >

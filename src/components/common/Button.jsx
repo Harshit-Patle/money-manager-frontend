@@ -15,6 +15,7 @@ const Button = ({
         secondary: 'bg-neutral-100 text-neutral-900 hover:bg-neutral-200 focus:ring-neutral-500',
         success: 'bg-success-600 text-white hover:bg-success-700 focus:ring-success-500',
         danger: 'bg-danger-600 text-white hover:bg-danger-700 focus:ring-danger-500',
+        warning: 'bg-orange-500 text-white hover:bg-orange-600 focus:ring-orange-500',
         outline: 'border border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50 focus:ring-primary-500',
         ghost: 'text-neutral-700 hover:bg-neutral-100 focus:ring-neutral-500'
     };

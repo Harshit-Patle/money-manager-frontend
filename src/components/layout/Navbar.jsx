@@ -59,8 +59,8 @@ const Navbar = ({ onMenuClick }) => {
                                                 <button
                                                     onClick={logout}
                                                     className={`${
-                                                        active ? 'bg-danger-50 text-danger-700' : 'text-neutral-700'
-                                                    } group flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors`}
+                                                        active ? 'bg-danger-600 text-white' : 'bg-danger-50 text-danger-600'
+                                                    } group flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition-all hover:shadow-sm`}
                                                 >
                                                     <ArrowRightOnRectangleIcon className="w-5 h-5" />
                                                     Logout
