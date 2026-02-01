@@ -147,6 +147,33 @@ export const TransactionProvider = ({ children }) => {
         };
     }, [allTransactions, dashboardFilter]);
 
+    const getAccountBalances = useCallback(() => {
+        if (!allTransactions || allTransactions.length === 0) {
+            return {
+                Cash: 0,
+                Bank: 0,
+                Wallet: 0
+            };
+        }
+
+        const balances = {
+            Cash: 0,
+            Bank: 0,
+            Wallet: 0
+        };
+
+        allTransactions.forEach(transaction => {
+            const account = transaction.account || 'Cash';
+            if (transaction.type === 'income') {
+                balances[account] += transaction.amount;
+            } else {
+                balances[account] -= transaction.amount;
+            }
+        });
+
+        return balances;
+    }, [allTransactions]);
+
     const value = useMemo(() => ({
         transactions,
         allTransactions,
@@ -162,7 +189,8 @@ export const TransactionProvider = ({ children }) => {
         deleteTransaction,
         transferBetweenAccounts,
         fetchTransactions,
-        getStats
+        getStats,
+        getAccountBalances
     }), [
         transactions,
         allTransactions,
@@ -177,7 +205,8 @@ export const TransactionProvider = ({ children }) => {
         deleteTransaction,
         transferBetweenAccounts,
         fetchTransactions,
-        getStats
+        getStats,
+        getAccountBalances
     ]);
 
     return (

@@ -1,14 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PageWrapper from '../components/layout/PageWrapper';
 import Input from '../components/common/Input';
 import Select from '../components/common/Select';
 import Button from '../components/common/Button';
 import { useTransactions } from '../hooks/useTransactions';
 import { ACCOUNTS } from '../utils/constants';
-import { ArrowDownIcon,ArrowRightIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
+import { ArrowDownIcon,ArrowRightIcon, CheckCircleIcon, WalletIcon, BanknotesIcon, CreditCardIcon } from '@heroicons/react/24/outline';
 
 const Transfer = () => {
-    const { transferBetweenAccounts } = useTransactions();
+    const { transferBetweenAccounts, getAccountBalances } = useTransactions();
+    const [accountBalances, setAccountBalances] = useState({ Cash: 0, Bank: 0, Wallet: 0 });
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     const [errors, setErrors] = useState({});
@@ -18,6 +19,25 @@ const Transfer = () => {
         amount: '',
         description: ''
     });
+
+    useEffect(() => {
+        if (getAccountBalances) {
+            setAccountBalances(getAccountBalances());
+        }
+    }, [getAccountBalances]);
+
+    const getAccountIcon = (account) => {
+        switch(account) {
+            case 'Cash':
+                return <BanknotesIcon className="w-5 h-5" />;
+            case 'Bank':
+                return <CreditCardIcon className="w-5 h-5" />;
+            case 'Wallet':
+                return <WalletIcon className="w-5 h-5" />;
+            default:
+                return <WalletIcon className="w-5 h-5" />;
+        }
+    };
 
     const handleChange = (field, value) => {
         setFormData(prev => ({ ...prev, [field]: value }));
@@ -41,6 +61,9 @@ const Transfer = () => {
         }
         if (!formData.amount || formData.amount <= 0) {
             newErrors.amount = 'Amount must be greater than 0';
+        }
+        if (formData.fromAccount && formData.amount && parseFloat(formData.amount) > accountBalances[formData.fromAccount]) {
+            newErrors.amount = `Insufficient balance. Available: ₹${accountBalances[formData.fromAccount].toFixed(2)}`;
         }
 
         setErrors(newErrors);
@@ -68,6 +91,11 @@ const Transfer = () => {
             });
 
             setTimeout(() => setSuccess(false), 3000);
+            
+            // Update balances after transfer
+            if (getAccountBalances) {
+                setAccountBalances(getAccountBalances());
+            }
         } catch (error) {
             setErrors({ submit: error.response?.data?.message || 'Transfer failed' });
         } finally {
@@ -81,6 +109,25 @@ const Transfer = () => {
                 <div className="mb-4 sm:mb-6">
                     <h1 className="text-xl sm:text-2xl font-display font-bold text-neutral-900">Account Transfer</h1>
                     <p className="text-sm sm:text-base text-neutral-600 mt-1">Transfer money between your accounts</p>
+                </div>
+
+                {/* Account Balances */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                    {ACCOUNTS.map(account => (
+                        <div key={account} className="bg-white border border-neutral-200 rounded-lg p-4">
+                            <div className="flex items-center gap-3">
+                                <div className="p-2 bg-primary-50 rounded-lg text-primary-600">
+                                    {getAccountIcon(account)}
+                                </div>
+                                <div className="flex-1">
+                                    <p className="text-sm text-neutral-600">{account}</p>
+                                    <p className="text-lg font-semibold text-neutral-900">
+                                        ₹{accountBalances[account]?.toFixed(2) || '0.00'}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
                 </div>
 
                 <div className="bg-white border border-neutral-200 rounded-lg p-4 sm:p-6">
