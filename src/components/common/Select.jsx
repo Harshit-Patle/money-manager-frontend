@@ -10,13 +10,13 @@ const Select = ({
     return (
         <div className="w-full">
             {label && (
-                <label className="block text-sm font-medium text-neutral-700 mb-1.5">
+                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
                     {label}
                     {required && <span className="text-danger-500 ml-1">*</span>}
                 </label>
             )}
             <select
-                className={`w-full px-3 py-2 border border-neutral-300 rounded-lg text-neutral-900 bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all ${error ? 'border-danger-500 focus:ring-danger-500' : ''
+                className={`w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg text-neutral-900 dark:text-neutral-100 bg-white dark:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all ${error ? 'border-danger-500 focus:ring-danger-500' : ''
                     } ${className}`}
                 {...props}
             >
@@ -33,7 +33,7 @@ const Select = ({
                 })}
             </select>
             {error && (
-                <p className="mt-1.5 text-sm text-danger-600">{error}</p>
+                <p className="mt-1.5 text-sm text-danger-600 dark:text-danger-400">{error}</p>
             )}
         </div>
     );

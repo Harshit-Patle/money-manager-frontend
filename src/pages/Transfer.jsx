@@ -107,20 +107,20 @@ const Transfer = () => {
         <PageWrapper>
             <div className="max-w-6xl">
                 <div className="mb-4 sm:mb-6">
-                    <h1 className="text-xl sm:text-2xl font-display font-bold text-neutral-900">Account Transfer</h1>
-                    <p className="text-sm sm:text-base text-neutral-600 mt-1">Transfer money between your accounts</p>
+                    <h1 className="text-xl sm:text-2xl font-display font-bold text-neutral-900 dark:text-neutral-100">Account Transfer</h1>
+                    <p className="text-sm sm:text-base text-neutral-600 dark:text-neutral-400 mt-1">Transfer money between your accounts</p>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Transfer Form */}
                     <div className="lg:col-span-2">
-                        <div className="bg-white border border-neutral-200 rounded-lg p-4 sm:p-6">
+                        <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-lg p-4 sm:p-6">
                     {success && (
-                        <div className="mb-6 bg-success-50 border border-success-200 rounded-lg p-4 flex items-start gap-3">
-                            <CheckCircleIcon className="w-5 h-5 text-success-600 flex-shrink-0 mt-0.5" />
+                        <div className="mb-6 bg-success-50 dark:bg-success-900/20 border border-success-200 dark:border-success-800 rounded-lg p-4 flex items-start gap-3">
+                            <CheckCircleIcon className="w-5 h-5 text-success-600 dark:text-success-400 flex-shrink-0 mt-0.5" />
                             <div>
-                                <p className="text-sm font-medium text-success-900">Transfer successful!</p>
-                                <p className="text-sm text-success-700 mt-1">
+                                <p className="text-sm font-medium text-success-900 dark:text-success-100">Transfer successful!</p>
+                                <p className="text-sm text-success-700 dark:text-success-300 mt-1">
                                     Your transfer has been recorded in both accounts.
                                 </p>
                             </div>
@@ -139,7 +139,7 @@ const Transfer = () => {
                             />
 
                             <div className="hidden md:flex items-center justify-center pt-2">
-                                <ArrowDownIcon className="w-7 h-7 text-neutral-400" />
+                                <ArrowDownIcon className="w-7 h-7 text-neutral-400 dark:text-neutral-600" />
                             </div>
 
                             <Select
@@ -171,8 +171,8 @@ const Transfer = () => {
                         />
 
                         {errors.submit && (
-                            <div className="bg-danger-50 border border-danger-200 rounded-lg p-3">
-                                <p className="text-sm text-danger-700">{errors.submit}</p>
+                            <div className="bg-danger-50 dark:bg-danger-900/20 border border-danger-200 dark:border-danger-800 rounded-lg p-3">
+                                <p className="text-sm text-danger-700 dark:text-danger-300">{errors.submit}</p>
                             </div>
                         )}
 
@@ -193,17 +193,17 @@ const Transfer = () => {
                     {/* Account Balances */}
                     <div className="lg:col-span-1">
                         <div className="sticky top-20">
-                            <h2 className="text-lg font-semibold text-neutral-900 mb-4">Account Balances</h2>
+                            <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Account Balances</h2>
                             <div className="space-y-4">
                                 {ACCOUNTS.map(account => (
-                                    <div key={account} className="bg-white border border-neutral-200 rounded-lg p-4">
+                                    <div key={account} className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-lg p-4">
                                         <div className="flex items-center gap-3">
-                                            <div className="p-2 bg-primary-50 rounded-lg text-primary-600">
+                                            <div className="p-2 bg-primary-50 dark:bg-primary-900/30 rounded-lg text-primary-600">
                                                 {getAccountIcon(account)}
                                             </div>
                                             <div className="flex-1">
-                                                <p className="text-sm text-neutral-600">{account}</p>
-                                                <p className="text-lg font-semibold text-neutral-900">
+                                                <p className="text-sm text-neutral-600 dark:text-neutral-400">{account}</p>
+                                                <p className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
                                                     ₹{accountBalances[account]?.toFixed(2) || '0.00'}
                                                 </p>
                                             </div>

@@ -210,7 +210,7 @@ const AddTransactionModal = ({ isOpen, onClose, editTransaction = null }) => {
                         />
                     </div>
 
-                    <div className="flex flex-col sm:flex-row gap-3 mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-neutral-200">
+                    <div className="flex flex-col sm:flex-row gap-3 mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-neutral-200 dark:border-neutral-700">
                         <Button
                             type="button"
                             variant="outline"

@@ -26,7 +26,7 @@ const Sidebar = ({ isOpen, onClose }) => {
             {/* Sidebar */}
             <aside className={`
                 fixed lg:sticky top-16 left-0 z-40
-                w-64 bg-white border-r border-neutral-200 
+                w-64 bg-white dark:bg-neutral-900 border-r border-neutral-200 dark:border-neutral-700
                 min-h-[calc(100vh-4rem)] 
                 transition-transform duration-300 ease-in-out
                 ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
@@ -35,7 +35,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                 <div className="lg:hidden flex justify-end p-4">
                     <button
                         onClick={onClose}
-                        className="p-2 rounded-lg hover:bg-neutral-100 text-neutral-700"
+                        className="p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300"
                     >
                         <XMarkIcon className="w-6 h-6" />
                     </button>
@@ -49,8 +49,8 @@ const Sidebar = ({ isOpen, onClose }) => {
                             onClick={onClose}
                             className={({ isActive }) =>
                                 `flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all ${isActive
-                                    ? 'bg-primary-50 text-primary-700'
-                                    : 'text-neutral-700 hover:bg-neutral-100'
+                                    ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400'
+                                    : 'text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800'
                                 }`
                             }
                         >

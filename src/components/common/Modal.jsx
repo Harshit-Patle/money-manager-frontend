@@ -36,14 +36,14 @@ const Modal = ({ isOpen, onClose, title, children, size = 'md' }) => {
                             leaveFrom="opacity-100 scale-100"
                             leaveTo="opacity-0 scale-95"
                         >
-                            <Dialog.Panel className={`w-full ${sizes[size]} transform overflow-hidden rounded-xl bg-white shadow-xl transition-all`}>
-                                <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-neutral-200">
-                                    <Dialog.Title className="text-base sm:text-lg font-semibold text-neutral-900">
+                            <Dialog.Panel className={`w-full ${sizes[size]} transform overflow-hidden rounded-xl bg-white dark:bg-neutral-900 shadow-xl transition-all`}>
+                                <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-neutral-200 dark:border-neutral-700">
+                                    <Dialog.Title className="text-base sm:text-lg font-semibold text-neutral-900 dark:text-neutral-100">
                                         {title}
                                     </Dialog.Title>
                                     <button
                                         onClick={onClose}
-                                        className="text-neutral-400 hover:text-neutral-600 transition-colors"
+                                        className="text-neutral-400 dark:text-neutral-500 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
                                     >
                                         <XMarkIcon className="w-5 h-5" />
                                     </button>

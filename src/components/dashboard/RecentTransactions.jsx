@@ -39,20 +39,20 @@ const RecentTransactions = () => {
 
     if (transactions.length === 0) {
         return (
-            <div className="bg-white border border-neutral-200 rounded-lg p-6 sm:p-8 text-center">
-                <ClockIcon className="w-12 h-12 text-neutral-300 mx-auto mb-3" />
-                <p className="text-sm sm:text-base text-neutral-500">No transactions in this period</p>
+            <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-lg p-6 sm:p-8 text-center">
+                <ClockIcon className="w-12 h-12 text-neutral-300 dark:text-neutral-600 mx-auto mb-3" />
+                <p className="text-sm sm:text-base text-neutral-500 dark:text-neutral-400">No transactions in this period</p>
             </div>
         );
     }
 
     return (
-        <div className="bg-white border border-neutral-200 rounded-lg p-4 sm:p-6">
-            <div className="flex items-center justify-between mb-4 sm:mb-6">
-                <h3 className="text-base sm:text-lg font-semibold text-neutral-900">
+        <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-lg p-4 sm:p-6">
+            <div className="flex items-baseline justify-between mb-4">
+                <h3 className="text-base sm:text-lg font-semibold text-neutral-900 dark:text-neutral-100">
                     Transaction History
                 </h3>
-                <span className="text-xs sm:text-sm text-neutral-500">
+                <span className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400">
                     {allFilteredTransactions.length} transaction{allFilteredTransactions.length !== 1 ? 's' : ''}
                 </span>
             </div>
@@ -64,7 +64,7 @@ const RecentTransactions = () => {
                     return (
                         <div
                             key={transaction._id}
-                            className="flex items-center justify-between p-3 rounded-lg hover:bg-neutral-50 transition-colors border border-neutral-100"
+                            className="flex items-center justify-between p-3 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors border border-neutral-100 dark:border-neutral-700"
                         >
                             <div className="flex items-center gap-3 flex-1 min-w-0">
                                 <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${isIncome ? 'bg-success-50' : 'bg-danger-50'
@@ -78,16 +78,16 @@ const RecentTransactions = () => {
 
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-center gap-2 mb-1">
-                                        <p className="text-sm font-medium text-neutral-900 truncate">
+                                        <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100 truncate">
                                             {transaction.category}
                                         </p>
                                         {transaction.description && (
-                                            <span className="text-xs text-neutral-500 truncate">
+                                            <span className="text-xs text-neutral-500 dark:text-neutral-400 truncate">
                                                 • {transaction.description}
                                             </span>
                                         )}
                                     </div>
-                                    <div className="flex items-center gap-2 text-xs text-neutral-500">
+                                    <div className="flex items-center gap-2 text-xs text-neutral-500 dark:text-neutral-400">
                                         <span>{transaction.division || 'General'}</span>
                                         <span>•</span>
                                         <span>{transaction.account || 'Cash'}</span>
@@ -110,18 +110,18 @@ const RecentTransactions = () => {
 
             {/* Pagination */}
             {totalPages > 1 && (
-                <div className="flex items-center justify-between mt-6 pt-4 border-t border-neutral-200">
+                <div className="flex items-center justify-between mt-6 pt-4 border-t border-neutral-200 dark:border-neutral-700">
                     <button
                         onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                         disabled={currentPage === 1}
-                        className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-neutral-700 bg-white border border-neutral-300 rounded-lg hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
                         <ChevronLeftIcon className="w-4 h-4" />
                         Previous
                     </button>
 
                     <div className="flex items-center gap-2">
-                        <span className="text-sm text-neutral-600">
+                        <span className="text-sm text-neutral-600 dark:text-neutral-400">
                             Page {currentPage} of {totalPages}
                         </span>
                     </div>
@@ -129,7 +129,7 @@ const RecentTransactions = () => {
                     <button
                         onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                         disabled={currentPage === totalPages}
-                        className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-neutral-700 bg-white border border-neutral-300 rounded-lg hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
                         Next
                         <ChevronRightIcon className="w-4 h-4" />

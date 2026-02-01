@@ -81,8 +81,8 @@ const IncomeExpenseChart = () => {
 
     if (chartData.length === 0) {
         return (
-            <div className="bg-white border border-neutral-200 rounded-lg p-6 sm:p-8 text-center">
-                <p className="text-sm sm:text-base text-neutral-500">No data available for chart</p>
+            <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-lg p-6 sm:p-8 text-center">
+                <p className="text-sm sm:text-base text-neutral-500 dark:text-neutral-400">No data available for chart</p>
             </div>
         );
     }
@@ -94,8 +94,8 @@ const IncomeExpenseChart = () => {
     };
 
     return (
-        <div className="bg-white border border-neutral-200 rounded-lg p-4 sm:p-6">
-            <h3 className="text-base sm:text-lg font-semibold text-neutral-900 mb-4 sm:mb-6">
+        <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-lg p-4 sm:p-6">
+            <h3 className="text-base sm:text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4 sm:mb-6">
                 Income vs Expense - {getPeriodLabel()}
             </h3>
             <ResponsiveContainer width="100%" height={300} className="sm:h-[350px]">

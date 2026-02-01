@@ -7,8 +7,8 @@ const Loader = ({ size = 'md', text = '' }) => {
 
     return (
         <div className="flex flex-col items-center justify-center gap-3">
-            <div className={`${sizes[size]} border-neutral-200 border-t-primary-600 rounded-full animate-spin`} />
-            {text && <p className="text-sm text-neutral-600">{text}</p>}
+            <div className={`${sizes[size]} border-neutral-200 dark:border-neutral-700 border-t-primary-600 rounded-full animate-spin`} />
+            {text && <p className="text-sm text-neutral-600 dark:text-neutral-400">{text}</p>}
         </div>
     );
 };

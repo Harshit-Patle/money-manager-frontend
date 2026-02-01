@@ -32,8 +32,8 @@ const CategorySummary = () => {
 
     if (categoryData.length === 0) {
         return (
-            <div className="bg-white border border-neutral-200 rounded-lg p-6 sm:p-8 text-center">
-                <p className="text-sm sm:text-base text-neutral-500">No category data available</p>
+            <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-lg p-6 sm:p-8 text-center">
+                <p className="text-sm sm:text-base text-neutral-500 dark:text-neutral-400">No category data available</p>
             </div>
         );
     }
@@ -42,9 +42,9 @@ const CategorySummary = () => {
         if (active && payload && payload.length) {
             const percentage = ((payload[0].value / totalAmount) * 100).toFixed(1);
             return (
-                <div className="bg-white border border-neutral-200 rounded-lg p-3 shadow-lg">
-                    <p className="text-sm font-semibold text-neutral-900">{payload[0].name}</p>
-                    <p className="text-sm text-neutral-600">
+                <div className="bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg p-3 shadow-lg">
+                    <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">{payload[0].name}</p>
+                    <p className="text-sm text-neutral-600 dark:text-neutral-400">
                         ₹{payload[0].value.toLocaleString('en-IN')} ({percentage}%)
                     </p>
                 </div>
@@ -54,10 +54,10 @@ const CategorySummary = () => {
     };
 
     return (
-        <div className="bg-white border border-neutral-200 rounded-lg p-4 sm:p-6">
+        <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-lg p-4 sm:p-6">
             <div className="mb-4">
-                <h3 className="text-base sm:text-lg font-semibold text-neutral-900">Expense by Category</h3>
-                <p className="text-xs text-neutral-500 mt-1">Total Expenses: ₹{totalAmount.toLocaleString('en-IN')}</p>
+                <h3 className="text-base sm:text-lg font-semibold text-neutral-900 dark:text-neutral-100">Expense by Category</h3>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">Total Expenses: ₹{totalAmount.toLocaleString('en-IN')}</p>
             </div>
             
             <div className="flex justify-center">
@@ -91,16 +91,16 @@ const CategorySummary = () => {
                     return (
                         <div 
                             key={item.name} 
-                            className="flex items-center gap-3 p-2 rounded-lg hover:bg-neutral-50 transition-colors"
+                            className="flex items-center gap-3 p-2 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
                         >
                             <div 
                                 className="w-4 h-4 rounded flex-shrink-0" 
                                 style={{ backgroundColor: COLORS[index % COLORS.length] }}
                             />
                             <div className="flex-1 min-w-0">
-                                <p className="text-sm font-medium text-neutral-900 truncate">{item.name}</p>
+                                <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100 truncate">{item.name}</p>
                                 <div className="flex items-center gap-2 mt-0.5">
-                                    <div className="flex-1 bg-neutral-200 rounded-full h-1.5 overflow-hidden">
+                                    <div className="flex-1 bg-neutral-200 dark:bg-neutral-700 rounded-full h-1.5 overflow-hidden">
                                         <div 
                                             className="h-full rounded-full transition-all"
                                             style={{ 
@@ -112,10 +112,10 @@ const CategorySummary = () => {
                                 </div>
                             </div>
                             <div className="text-right flex-shrink-0">
-                                <p className="text-sm font-semibold text-neutral-700">
+                                <p className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
                                     ₹{item.value.toLocaleString('en-IN')}
                                 </p>
-                                <p className="text-xs text-neutral-500">
+                                <p className="text-xs text-neutral-500 dark:text-neutral-400">
                                     {percentage}%
                                 </p>
                             </div>

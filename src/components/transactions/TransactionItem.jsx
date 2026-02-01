@@ -31,7 +31,7 @@ const TransactionItem = ({ transaction, onEdit }) => {
     };
 
     return (
-        <div className="bg-white border border-neutral-200 rounded-lg p-3 sm:p-4 hover:shadow-md transition-shadow">
+        <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-lg p-3 sm:p-4 hover:shadow-md transition-shadow">
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                 <div className="flex items-start gap-3 flex-1">
                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${isIncome ? 'bg-success-100' : 'bg-danger-100'
@@ -43,8 +43,8 @@ const TransactionItem = ({ transaction, onEdit }) => {
                     <div className="flex-1 min-w-0">
                         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-1">
                             <div className="flex-1">
-                                <h4 className="text-sm font-semibold text-neutral-900">{transaction.category}</h4>
-                                <p className="text-xs text-neutral-500 mt-0.5">{formatDateTime(transaction.createdAt)}</p>
+                                <h4 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">{transaction.category}</h4>
+                                <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">{formatDateTime(transaction.createdAt)}</p>
                             </div>
                             <div className="text-left sm:text-right">
                                 <p className={`text-lg font-bold ${isIncome ? 'text-success-600' : 'text-danger-600'
@@ -55,14 +55,14 @@ const TransactionItem = ({ transaction, onEdit }) => {
                         </div>
 
                         <div className="flex items-center gap-2 mt-2 flex-wrap">
-                            <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded bg-neutral-100 text-neutral-700">
+                            <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300">
                                 {transaction.division}
                             </span>
-                            <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded bg-neutral-100 text-neutral-700">
-                                {transaction.account}
+                            <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300">
+                                {transaction.account || 'Cash'}
                             </span>
                             {!canEdit && (
-                                <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded bg-neutral-200 text-neutral-600">
+                                <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400">
                                     <ClockIcon className="w-3 h-3 mr-1" />
                                     Locked
                                 </span>
@@ -70,7 +70,7 @@ const TransactionItem = ({ transaction, onEdit }) => {
                         </div>
 
                         {transaction.description && (
-                            <p className="text-sm text-neutral-600 mt-2">{transaction.description}</p>
+                            <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-2">{transaction.description}</p>
                         )}
                     </div>
                 </div>
@@ -91,7 +91,7 @@ const TransactionItem = ({ transaction, onEdit }) => {
                         size="sm"
                         onClick={handleDelete}
                         disabled={deleting || !canEdit}
-                        className="flex items-center gap-1 text-danger-600 hover:bg-danger-50"
+                        className="flex items-center gap-1 text-danger-600 dark:text-danger-400 hover:bg-danger-50 dark:hover:bg-danger-900/20"
                         title={canEdit ? `${hoursRemaining}h remaining to delete` : 'Delete time expired'}
                     >
                         <TrashIcon className="w-4 h-4" />
