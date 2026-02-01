@@ -1,7 +1,7 @@
 import PageWrapper from '../components/layout/PageWrapper';
 import DashboardStats from '../components/dashboard/DashboardStats';
 import IncomeExpenseChart from '../components/dashboard/IncomeExpenseChart';
-import CategorySummary from '../components/dashboard/CategorySummary';
+import RecentTransactions from '../components/dashboard/RecentTransactions';
 import Select from '../components/common/Select';
 import { useTransactions } from '../hooks/useTransactions';
 import { DATE_FILTERS } from '../utils/constants';
@@ -36,14 +36,9 @@ const Dashboard = () => {
 
                 <DashboardStats stats={stats} />
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div className="lg:col-span-2">
-                        <IncomeExpenseChart />
-                    </div>
-                    <div className="lg:col-span-1">
-                        <CategorySummary />
-                    </div>
-                </div>
+                <IncomeExpenseChart />
+
+                <RecentTransactions />
             </div>
         </PageWrapper>
     );
