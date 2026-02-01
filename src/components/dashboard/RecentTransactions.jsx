@@ -1,10 +1,13 @@
+import { useState, useEffect } from 'react';
 import { useTransactions } from '../../hooks/useTransactions';
 import { getDateRangeForFilter } from '../../utils/date';
-import { ClockIcon, ArrowTrendingUpIcon, ArrowTrendingDownIcon } from '@heroicons/react/24/outline';
+import { ClockIcon, ArrowTrendingUpIcon, ArrowTrendingDownIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import { format } from 'date-fns';
 
 const RecentTransactions = () => {
     const { allTransactions = [], dashboardFilter } = useTransactions();
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
     const getFilteredTransactions = () => {
         if (!allTransactions || allTransactions.length === 0) {
@@ -17,13 +20,22 @@ const RecentTransactions = () => {
             return date >= dateRange.from && date <= dateRange.to;
         });
 
-        // Sort by date (most recent first) and limit to 10
-        return filtered
-            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-            .slice(0, 10);
+        // Sort by date (most recent first)
+        return filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     };
 
-    const transactions = getFilteredTransactions();
+    const allFilteredTransactions = getFilteredTransactions();
+    const totalPages = Math.ceil(allFilteredTransactions.length / itemsPerPage);
+    
+    // Get transactions for current page
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const transactions = allFilteredTransactions.slice(startIndex, endIndex);
+
+    // Reset to page 1 when filter changes
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [dashboardFilter]);
 
     if (transactions.length === 0) {
         return (
@@ -41,7 +53,7 @@ const RecentTransactions = () => {
                     Transaction History
                 </h3>
                 <span className="text-xs sm:text-sm text-neutral-500">
-                    {transactions.length} transaction{transactions.length !== 1 ? 's' : ''}
+                    {allFilteredTransactions.length} transaction{allFilteredTransactions.length !== 1 ? 's' : ''}
                 </span>
             </div>
 
@@ -95,6 +107,35 @@ const RecentTransactions = () => {
                     );
                 })}
             </div>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+                <div className="flex items-center justify-between mt-6 pt-4 border-t border-neutral-200">
+                    <button
+                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                        disabled={currentPage === 1}
+                        className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-neutral-700 bg-white border border-neutral-300 rounded-lg hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                        <ChevronLeftIcon className="w-4 h-4" />
+                        Previous
+                    </button>
+
+                    <div className="flex items-center gap-2">
+                        <span className="text-sm text-neutral-600">
+                            Page {currentPage} of {totalPages}
+                        </span>
+                    </div>
+
+                    <button
+                        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                        disabled={currentPage === totalPages}
+                        className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-neutral-700 bg-white border border-neutral-300 rounded-lg hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                        Next
+                        <ChevronRightIcon className="w-4 h-4" />
+                    </button>
+                </div>
+            )}
         </div>
     );
 };

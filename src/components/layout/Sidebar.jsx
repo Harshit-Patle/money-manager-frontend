@@ -18,14 +18,14 @@ const Sidebar = ({ isOpen, onClose }) => {
             {/* Mobile overlay */}
             {isOpen && (
                 <div
-                    className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+                    className="fixed inset-0 bg-black/50 z-30 lg:hidden"
                     onClick={onClose}
                 />
             )}
 
             {/* Sidebar */}
             <aside className={`
-                fixed lg:sticky top-16 left-0 z-50
+                fixed lg:sticky top-16 left-0 z-40
                 w-64 bg-white border-r border-neutral-200 
                 min-h-[calc(100vh-4rem)] 
                 transition-transform duration-300 ease-in-out
