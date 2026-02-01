@@ -13,7 +13,8 @@ const Register = () => {
         firstName: '',
         lastName: '',
         email: '',
-        password: ''
+        password: '',
+        confirmPassword: ''
     });
 
     const handleChange = (field, value) => {
@@ -44,6 +45,12 @@ const Register = () => {
             newErrors.password = 'Password is required';
         } else if (formData.password.length < 6) {
             newErrors.password = 'Password must be at least 6 characters';
+        }
+
+        if (!formData.confirmPassword) {
+            newErrors.confirmPassword = 'Please confirm your password';
+        } else if (formData.password !== formData.confirmPassword) {
+            newErrors.confirmPassword = 'Passwords do not match';
         }
 
         setErrors(newErrors);
@@ -116,6 +123,16 @@ const Register = () => {
                             value={formData.password}
                             onChange={(e) => handleChange('password', e.target.value)}
                             error={errors.password}
+                            required
+                        />
+
+                        <Input
+                            label="Confirm Password"
+                            type="password"
+                            placeholder="Re-enter your password"
+                            value={formData.confirmPassword}
+                            onChange={(e) => handleChange('confirmPassword', e.target.value)}
+                            error={errors.confirmPassword}
                             required
                         />
 

@@ -32,7 +32,15 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const register = useCallback(async (userData) => {
-        const data = await authAPI.register(userData);
+        // Combine firstName and lastName into name field for backend
+        const { firstName, lastName, ...rest } = userData;
+        const name = `${firstName} ${lastName}`.trim();
+        
+        const data = await authAPI.register({
+            name,
+            ...rest
+        });
+        
         // Backend doesn't return token on register, so login after
         const loginData = await authAPI.login({
             email: userData.email,
