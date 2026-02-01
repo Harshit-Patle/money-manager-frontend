@@ -107,8 +107,8 @@ const Transfer = () => {
                                 required
                             />
 
-                            <div className="hidden md:flex items-center justify-center p-4">
-                                <ArrowDownIcon className="w-6 h-6 text-neutral-400" />
+                            <div className="hidden md:flex items-center justify-center pt-2">
+                                <ArrowDownIcon className="w-7 h-7 text-neutral-400" />
                             </div>
 
                             <Select

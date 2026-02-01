@@ -17,6 +17,13 @@ export const TransactionProvider = ({ children }) => {
         to: ''
     });
     const [dashboardFilter, setDashboardFilter] = useState(DATE_FILTERS.MONTHLY);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    // Check authentication status
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        setIsAuthenticated(!!token);
+    }, []);
 
     const fetchTransactions = useCallback(async () => {
         const token = localStorage.getItem('token');
@@ -54,12 +61,18 @@ export const TransactionProvider = ({ children }) => {
     }, [dashboardFilter]);
 
     useEffect(() => {
-        fetchTransactions();
-    }, [fetchTransactions]);
+        const token = localStorage.getItem('token');
+        if (token) {
+            fetchTransactions();
+        }
+    }, [fetchTransactions, isAuthenticated]);
 
     useEffect(() => {
-        fetchCategorySummary();
-    }, [fetchCategorySummary]);
+        const token = localStorage.getItem('token');
+        if (token) {
+            fetchCategorySummary();
+        }
+    }, [fetchCategorySummary, isAuthenticated]);
 
     const addTransaction = useCallback(async (transactionData) => {
         const data = await transactionAPI.addTransaction(transactionData);

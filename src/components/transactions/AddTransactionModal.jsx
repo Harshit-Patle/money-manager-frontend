@@ -24,18 +24,23 @@ const AddTransactionModal = ({ isOpen, onClose, editTransaction = null }) => {
     });
 
     useEffect(() => {
-        if (editTransaction) {
-            setFormData({
-                type: editTransaction.type,
-                amount: editTransaction.amount,
-                category: editTransaction.category,
-                division: editTransaction.division,
-                account: editTransaction.account,
-                description: editTransaction.description || ''
-            });
-            setSelectedTab(editTransaction.type === TRANSACTION_TYPES.INCOME ? 0 : 1);
-        } else {
-            resetForm();
+        if (isOpen) {
+            if (editTransaction) {
+                const accountValue = editTransaction.account || 'Cash'; // Default to Cash if undefined
+                
+                setFormData({
+                    type: editTransaction.type || TRANSACTION_TYPES.EXPENSE,
+                    amount: String(editTransaction.amount || ''),
+                    category: editTransaction.category || '',
+                    division: editTransaction.division || '',
+                    account: accountValue,
+                    description: editTransaction.description || ''
+                });
+                setSelectedTab(editTransaction.type === TRANSACTION_TYPES.INCOME ? 0 : 1);
+                setErrors({}); // Clear any previous errors
+            } else {
+                resetForm();
+            }
         }
     }, [editTransaction, isOpen]);
 
@@ -110,8 +115,8 @@ const AddTransactionModal = ({ isOpen, onClose, editTransaction = null }) => {
                 await addTransaction(transactionData);
             }
 
-            onClose();
             resetForm();
+            onClose();
         } catch (error) {
             alert(error.response?.data?.message || 'Failed to save transaction');
         } finally {
@@ -131,7 +136,7 @@ const AddTransactionModal = ({ isOpen, onClose, editTransaction = null }) => {
             title={editTransaction ? 'Edit Transaction' : 'Add Transaction'}
             size="md"
         >
-            <Tab.Group selectedIndex={selectedTab} onChange={handleTabChange}>
+            <Tab.Group selectedIndex={selectedTab} onChange={editTransaction ? undefined : handleTabChange}>
                 {!editTransaction && (
                     <Tab.List className="flex gap-2 mb-4 sm:mb-6">
                         <Tab
@@ -217,7 +222,7 @@ const AddTransactionModal = ({ isOpen, onClose, editTransaction = null }) => {
                         </Button>
                         <Button
                             type="submit"
-                            variant={selectedTab === 0 ? 'success' : 'warning'}
+                            variant={formData.type === TRANSACTION_TYPES.INCOME ? 'success' : 'warning'}
                             className="flex-1"
                             disabled={loading}
                         >

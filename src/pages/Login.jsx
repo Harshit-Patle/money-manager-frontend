@@ -46,7 +46,11 @@ const Login = () => {
         setLoading(true);
         try {
             await login(formData);
-            navigate('/home');
+            // Small delay to ensure state updates
+            setTimeout(() => {
+                navigate('/home');
+                window.location.reload(); // Force reload to trigger data fetch
+            }, 100);
         } catch (error) {
             setErrors({ submit: error.response?.data?.message || 'Invalid credentials' });
         } finally {
