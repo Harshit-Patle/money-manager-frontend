@@ -6,7 +6,7 @@ const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'
 const CategorySummary = () => {
     const { allTransactions = [] } = useTransactions();
 
-    // Calculate category data from all transactions
+    // Calculate category data from expense transactions only
     const getCategoryData = () => {
         if (!allTransactions || allTransactions.length === 0) {
             return [];
@@ -15,10 +15,13 @@ const CategorySummary = () => {
         const categoryMap = {};
 
         allTransactions.forEach(t => {
-            if (!categoryMap[t.category]) {
-                categoryMap[t.category] = { name: t.category, value: 0 };
+            // Only include expense transactions
+            if (t.type === 'expense') {
+                if (!categoryMap[t.category]) {
+                    categoryMap[t.category] = { name: t.category, value: 0 };
+                }
+                categoryMap[t.category].value += t.amount;
             }
-            categoryMap[t.category].value += t.amount;
         });
 
         return Object.values(categoryMap).sort((a, b) => b.value - a.value);
@@ -53,8 +56,8 @@ const CategorySummary = () => {
     return (
         <div className="bg-white border border-neutral-200 rounded-lg p-4 sm:p-6">
             <div className="mb-4">
-                <h3 className="text-base sm:text-lg font-semibold text-neutral-900">Category Summary</h3>
-                <p className="text-xs text-neutral-500 mt-1">Total: ₹{totalAmount.toLocaleString('en-IN')}</p>
+                <h3 className="text-base sm:text-lg font-semibold text-neutral-900">Expense by Category</h3>
+                <p className="text-xs text-neutral-500 mt-1">Total Expenses: ₹{totalAmount.toLocaleString('en-IN')}</p>
             </div>
             
             <div className="flex justify-center">
