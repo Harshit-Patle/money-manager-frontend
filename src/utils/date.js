@@ -1,4 +1,16 @@
-import { format, subDays, subMonths, subYears, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear, differenceInHours } from 'date-fns';
+import {
+    differenceInHours,
+    endOfDay,
+    endOfMonth,
+    endOfWeek,
+    format,
+    startOfDay,
+    startOfMonth,
+    startOfWeek,
+    subDays,
+    subMonths,
+    subWeeks
+} from 'date-fns';
 
 export const formatDate = (date) => {
     return format(new Date(date), 'MMM dd, yyyy');
@@ -17,24 +29,27 @@ export const getDateRangeForFilter = (filterType) => {
 
     switch (filterType) {
         case 'weekly':
+            // Rolling last 7 days (today inclusive)
             return {
-                from: startOfWeek(now, { weekStartsOn: 1 }),
-                to: endOfWeek(now, { weekStartsOn: 1 })
+                from: startOfDay(subDays(now, 6)),
+                to: endOfDay(now)
             };
         case 'monthly':
+            // Rolling last 4 weeks aligned to week boundaries (Mon-Sun)
             return {
-                from: startOfMonth(now),
-                to: endOfMonth(now)
+                from: startOfWeek(subWeeks(now, 3), { weekStartsOn: 1 }),
+                to: endOfWeek(now, { weekStartsOn: 1 })
             };
         case 'yearly':
+            // Rolling last 12 months aligned to month boundaries
             return {
-                from: startOfYear(now),
-                to: endOfYear(now)
+                from: startOfMonth(subMonths(now, 11)),
+                to: endOfMonth(now)
             };
         default:
             return {
                 from: subMonths(now, 1),
-                to: now
+                to: endOfDay(now)
             };
     }
 };
