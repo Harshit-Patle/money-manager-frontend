@@ -20,7 +20,9 @@ const Select = ({
                     } ${className}`}
                 {...props}
             >
-                <option value="">{placeholder}</option>
+                {placeholder != null && placeholder !== false && (
+                    <option value="">{placeholder}</option>
+                )}
                 {options.map((option) => {
                     // Handle both string and object formats
                     const value = typeof option === 'string' ? option : option.value;

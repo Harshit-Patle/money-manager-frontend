@@ -85,8 +85,8 @@ const RecentTransactions = () => {
     }
 
     return (
-        <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-lg p-4 sm:p-6">
-            <div className="flex items-baseline justify-between mb-4">
+        <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-lg p-4 sm:p-6 min-w-0">
+            <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-4 min-w-0">
                 <h3 className="text-base sm:text-lg font-semibold text-neutral-900 dark:text-neutral-100">
                     Transaction History
                 </h3>
@@ -103,7 +103,7 @@ const RecentTransactions = () => {
                     return (
                         <div
                             key={transaction._id}
-                            className="flex items-center justify-between p-3 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors border border-neutral-100 dark:border-neutral-700"
+                            className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-3 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors border border-neutral-100 dark:border-neutral-700 min-w-0"
                         >
                             <div className="flex items-center gap-3 flex-1 min-w-0">
                                 <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${isTransfer
@@ -148,7 +148,7 @@ const RecentTransactions = () => {
                                 </div>
                             </div>
 
-                            <div className="text-right flex-shrink-0 ml-3">
+                            <div className="text-right flex-shrink-0 sm:ml-3 self-end sm:self-auto">
                                 <p className={`text-sm sm:text-base font-semibold ${isTransfer
                                     ? 'text-primary-600 dark:text-primary-400'
                                     : isIncome
@@ -167,17 +167,17 @@ const RecentTransactions = () => {
 
             {/* Pagination */}
             {totalPages > 1 && (
-                <div className="flex items-center justify-between mt-6 pt-4 border-t border-neutral-200 dark:border-neutral-700">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-6 pt-4 border-t border-neutral-200 dark:border-neutral-700">
                     <button
                         onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                         disabled={currentPage === 1}
-                        className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        className="flex items-center justify-center gap-2 w-full sm:w-auto px-3 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
                         <ChevronLeftIcon className="w-4 h-4" />
                         Previous
                     </button>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-center gap-2">
                         <span className="text-sm text-neutral-600 dark:text-neutral-400">
                             Page {currentPage} of {totalPages}
                         </span>
@@ -186,7 +186,7 @@ const RecentTransactions = () => {
                     <button
                         onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                         disabled={currentPage === totalPages}
-                        className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        className="flex items-center justify-center gap-2 w-full sm:w-auto px-3 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
                         Next
                         <ChevronRightIcon className="w-4 h-4" />

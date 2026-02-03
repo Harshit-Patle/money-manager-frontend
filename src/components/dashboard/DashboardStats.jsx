@@ -48,7 +48,10 @@ const DashboardStats = ({ stats }) => {
                         </div>
                     </div>
                     <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">{stat.label}</p>
-                    <p className={`text-3xl font-bold ${stat.textColor}`}>
+                    <p
+                        className={`text-2xl sm:text-3xl font-bold ${stat.textColor} truncate`}
+                        title={`₹${Math.abs(stat.value).toLocaleString('en-IN')}`}
+                    >
                         ₹{Math.abs(stat.value).toLocaleString('en-IN')}
                     </p>
                 </div>

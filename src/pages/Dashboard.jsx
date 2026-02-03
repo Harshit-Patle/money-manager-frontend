@@ -40,7 +40,7 @@ const Dashboard = () => {
                             value={dashboardFilter}
                             onChange={(e) => setDashboardFilter(e.target.value)}
                             options={filterOptions}
-                            placeholder="Select period"
+                            placeholder={null}
                         />
                     </div>
                 </div>

@@ -94,11 +94,11 @@ const IncomeExpenseChart = () => {
     };
 
     return (
-        <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-lg p-4 sm:p-6">
+        <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-lg p-4 sm:p-6 min-w-0">
             <h3 className="text-base sm:text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4 sm:mb-6">
                 Income vs Expense - {getPeriodLabel()}
             </h3>
-            <div className="h-64 sm:h-80">
+            <div className="h-64 sm:h-80 min-w-0 overflow-hidden">
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={chartData}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
