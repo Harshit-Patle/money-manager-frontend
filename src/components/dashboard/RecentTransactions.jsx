@@ -26,7 +26,7 @@ const RecentTransactions = () => {
 
     const allFilteredTransactions = getFilteredTransactions();
     const totalPages = Math.ceil(allFilteredTransactions.length / itemsPerPage);
-    
+
     // Get transactions for current page
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -87,12 +87,14 @@ const RecentTransactions = () => {
                                             </span>
                                         )}
                                     </div>
-                                    <div className="flex items-center gap-2 text-xs text-neutral-500 dark:text-neutral-400">
-                                        <span>{transaction.division || 'General'}</span>
-                                        <span>•</span>
-                                        <span>{transaction.account || 'Cash'}</span>
-                                        <span>•</span>
-                                        <span>{format(new Date(transaction.createdAt), 'MMM dd, yyyy')}</span>
+                                    <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2 text-xs text-neutral-500 dark:text-neutral-400">
+                                        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 min-w-0">
+                                            <span className="truncate max-w-[12rem]">{transaction.division || 'General'}</span>
+                                            <span className="hidden sm:inline">•</span>
+                                            <span className="truncate max-w-[12rem]">{transaction.account || 'Cash'}</span>
+                                        </div>
+                                        <span className="hidden sm:inline">•</span>
+                                        <span className="flex-shrink-0">{format(new Date(transaction.createdAt), 'MMM dd, yyyy')}</span>
                                     </div>
                                 </div>
                             </div>

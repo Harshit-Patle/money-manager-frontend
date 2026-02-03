@@ -6,7 +6,7 @@ const PageWrapper = ({ children }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     return (
-        <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950">
+        <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 overflow-x-hidden">
             <Navbar onMenuClick={() => setIsSidebarOpen(true)} />
             <div className="flex">
                 <Sidebar

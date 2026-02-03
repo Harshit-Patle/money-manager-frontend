@@ -98,37 +98,39 @@ const IncomeExpenseChart = () => {
             <h3 className="text-base sm:text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4 sm:mb-6">
                 Income vs Expense - {getPeriodLabel()}
             </h3>
-            <ResponsiveContainer width="100%" height={300} className="sm:h-[350px]">
-                <BarChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
-                    <XAxis
-                        dataKey="label"
-                        tick={{ fontSize: 12, fill: '#737373' }}
-                        stroke="#d4d4d4"
-                        angle={dashboardFilter === DATE_FILTERS.YEARLY ? -45 : 0}
-                        textAnchor={dashboardFilter === DATE_FILTERS.YEARLY ? 'end' : 'middle'}
-                        height={dashboardFilter === DATE_FILTERS.YEARLY ? 80 : 30}
-                    />
-                    <YAxis
-                        tick={{ fontSize: 12, fill: '#737373' }}
-                        stroke="#d4d4d4"
-                    />
-                    <Tooltip
-                        contentStyle={{
-                            backgroundColor: '#fff',
-                            border: '1px solid #e5e5e5',
-                            borderRadius: '8px',
-                            fontSize: '12px'
-                        }}
-                        formatter={(value) => `₹${value.toLocaleString('en-IN')}`}
-                    />
-                    <Legend
-                        wrapperStyle={{ fontSize: '12px' }}
-                    />
-                    <Bar dataKey="income" fill="#22c55e" name="Income" radius={[4, 4, 0, 0]} />
-                    <Bar dataKey="expense" fill="#ef4444" name="Expense" radius={[4, 4, 0, 0]} />
-                </BarChart>
-            </ResponsiveContainer>
+            <div className="h-64 sm:h-80">
+                <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={chartData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
+                        <XAxis
+                            dataKey="label"
+                            tick={{ fontSize: 12, fill: '#737373' }}
+                            stroke="#d4d4d4"
+                            angle={dashboardFilter === DATE_FILTERS.YEARLY ? -45 : 0}
+                            textAnchor={dashboardFilter === DATE_FILTERS.YEARLY ? 'end' : 'middle'}
+                            height={dashboardFilter === DATE_FILTERS.YEARLY ? 80 : 30}
+                        />
+                        <YAxis
+                            tick={{ fontSize: 12, fill: '#737373' }}
+                            stroke="#d4d4d4"
+                        />
+                        <Tooltip
+                            contentStyle={{
+                                backgroundColor: '#fff',
+                                border: '1px solid #e5e5e5',
+                                borderRadius: '8px',
+                                fontSize: '12px'
+                            }}
+                            formatter={(value) => `₹${value.toLocaleString('en-IN')}`}
+                        />
+                        <Legend
+                            wrapperStyle={{ fontSize: '12px' }}
+                        />
+                        <Bar dataKey="income" fill="#22c55e" name="Income" radius={[4, 4, 0, 0]} />
+                        <Bar dataKey="expense" fill="#ef4444" name="Expense" radius={[4, 4, 0, 0]} />
+                    </BarChart>
+                </ResponsiveContainer>
+            </div>
         </div>
     );
 };
