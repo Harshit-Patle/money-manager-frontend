@@ -9,10 +9,54 @@ const TransactionList = ({ onEdit }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 7;
 
-    const totalPages = Math.ceil(transactions.length / itemsPerPage);
+    const displayTransactions = (() => {
+        if (!transactions || transactions.length === 0) return [];
+
+        const byTransferId = new Map();
+        const result = [];
+
+        for (const t of transactions) {
+            if (t?.category === 'Transfer' && t?.transferId) {
+                const key = String(t.transferId);
+                const existing = byTransferId.get(key) || [];
+                existing.push(t);
+                byTransferId.set(key, existing);
+            } else {
+                result.push(t);
+            }
+        }
+
+        for (const [transferId, items] of byTransferId.entries()) {
+            const expenseSide = items.find(i => i.type === 'expense');
+            const incomeSide = items.find(i => i.type === 'income');
+            const primary = expenseSide || incomeSide || items[0];
+            const createdAt = items.reduce((max, cur) => {
+                const d = new Date(cur.createdAt);
+                return d > max ? d : max;
+            }, new Date(0));
+
+            result.push({
+                _id: primary._id,
+                transferId,
+                __isTransfer: true,
+                type: 'transfer',
+                amount: primary.amount,
+                category: 'Transfer',
+                division: primary.division,
+                description: primary.description,
+                fromAccount: expenseSide?.account,
+                toAccount: incomeSide?.account,
+                createdAt: createdAt.toISOString(),
+            });
+        }
+
+        return result;
+    })();
+
+    const totalPages = Math.ceil(displayTransactions.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const currentTransactions = transactions.slice(startIndex, endIndex);
+    const currentTransactions = displayTransactions.slice(startIndex, endIndex);
 
     if (loading) {
         return (
@@ -22,7 +66,7 @@ const TransactionList = ({ onEdit }) => {
         );
     }
 
-    if (transactions.length === 0) {
+    if (displayTransactions.length === 0) {
         return (
             <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-lg p-12 text-center">
                 <InboxIcon className="w-12 h-12 text-neutral-300 dark:text-neutral-600 mx-auto mb-3" />
@@ -62,7 +106,7 @@ const TransactionList = ({ onEdit }) => {
                             Page {currentPage} of {totalPages}
                         </span>
                         <span className="text-xs text-neutral-500 dark:text-neutral-400">
-                            ({transactions.length} total)
+                            ({displayTransactions.length} total)
                         </span>
                     </div>
 

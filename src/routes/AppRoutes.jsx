@@ -5,7 +5,7 @@ import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Home from '../pages/Home';
 import Dashboard from '../pages/Dashboard';
-import Transfer from '../pages/Transfer';
+import TransferPage from '../pages/TransferPage';
 
 const ProtectedRoute = ({ children }) => {
     const { isAuthenticated, loading } = useAuth();
@@ -75,7 +75,7 @@ const AppRoutes = () => {
                     path="/transfer"
                     element={
                         <ProtectedRoute>
-                            <Transfer />
+                            <TransferPage />
                         </ProtectedRoute>
                     }
                 />

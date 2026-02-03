@@ -3,6 +3,7 @@ import {
     PencilIcon,
     TrashIcon,
     BanknotesIcon,
+    ArrowsRightLeftIcon,
     ClockIcon
 } from '@heroicons/react/24/outline';
 import { formatDateTime, canEditTransaction, getHoursRemaining } from '../../utils/date';
@@ -13,7 +14,8 @@ const TransactionItem = ({ transaction, onEdit }) => {
     const { deleteTransaction } = useTransactions();
     const [deleting, setDeleting] = useState(false);
 
-    const isIncome = transaction.type === 'income';
+    const isTransfer = transaction.__isTransfer === true || transaction.type === 'transfer';
+    const isIncome = !isTransfer && transaction.type === 'income';
     const canEdit = canEditTransaction(transaction.createdAt);
     const hoursRemaining = getHoursRemaining(transaction.createdAt);
 
@@ -34,10 +36,18 @@ const TransactionItem = ({ transaction, onEdit }) => {
         <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-lg p-3 sm:p-4 hover:shadow-md transition-shadow">
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                 <div className="flex items-start gap-3 flex-1">
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${isIncome ? 'bg-success-100' : 'bg-danger-100'
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${isTransfer
+                        ? 'bg-primary-100 dark:bg-primary-900/30'
+                        : isIncome
+                            ? 'bg-success-100'
+                            : 'bg-danger-100'
                         }`}>
-                        <BanknotesIcon className={`w-5 h-5 ${isIncome ? 'text-success-600' : 'text-danger-600'
-                            }`} />
+                        {isTransfer ? (
+                            <ArrowsRightLeftIcon className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                        ) : (
+                            <BanknotesIcon className={`w-5 h-5 ${isIncome ? 'text-success-600' : 'text-danger-600'
+                                }`} />
+                        )}
                     </div>
 
                     <div className="flex-1 min-w-0">
@@ -47,9 +57,15 @@ const TransactionItem = ({ transaction, onEdit }) => {
                                 <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">{formatDateTime(transaction.createdAt)}</p>
                             </div>
                             <div className="text-left sm:text-right">
-                                <p className={`text-lg font-bold ${isIncome ? 'text-success-600' : 'text-danger-600'
+                                <p className={`text-lg font-bold ${isTransfer
+                                    ? 'text-primary-600 dark:text-primary-400'
+                                    : isIncome
+                                        ? 'text-success-600'
+                                        : 'text-danger-600'
                                     }`}>
-                                    {isIncome ? '+' : '-'}₹{transaction.amount.toLocaleString('en-IN')}
+                                    {isTransfer
+                                        ? `₹${transaction.amount.toLocaleString('en-IN')}`
+                                        : `${isIncome ? '+' : '-'}₹${transaction.amount.toLocaleString('en-IN')}`}
                                 </p>
                             </div>
                         </div>
@@ -58,9 +74,15 @@ const TransactionItem = ({ transaction, onEdit }) => {
                             <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300">
                                 {transaction.division}
                             </span>
-                            <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300">
-                                {transaction.account || 'Cash'}
-                            </span>
+                            {isTransfer ? (
+                                <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300">
+                                    {(transaction.fromAccount || '—')} → {(transaction.toAccount || '—')}
+                                </span>
+                            ) : (
+                                <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300">
+                                    {transaction.account || 'Cash'}
+                                </span>
+                            )}
                             {!canEdit && (
                                 <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400">
                                     <ClockIcon className="w-3 h-3 mr-1" />
@@ -76,16 +98,18 @@ const TransactionItem = ({ transaction, onEdit }) => {
                 </div>
 
                 <div className="flex items-center gap-2 sm:ml-4 justify-end sm:justify-start">
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => onEdit(transaction)}
-                        disabled={!canEdit}
-                        className="flex items-center gap-1"
-                        title={canEdit ? `${hoursRemaining}h remaining to edit` : 'Edit time expired'}
-                    >
-                        <PencilIcon className="w-4 h-4" />
-                    </Button>
+                    {!isTransfer && (
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => onEdit(transaction)}
+                            disabled={!canEdit}
+                            className="flex items-center gap-1"
+                            title={canEdit ? `${hoursRemaining}h remaining to edit` : 'Edit time expired'}
+                        >
+                            <PencilIcon className="w-4 h-4" />
+                        </Button>
+                    )}
                     <Button
                         variant="ghost"
                         size="sm"

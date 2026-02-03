@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { transactionAPI } from '../api/transaction.api';
+import { transferAPI } from '../api/transfer.api';
 import { getDateRangeForFilter } from '../utils/date';
 import { DATE_FILTERS } from '../utils/constants';
 
@@ -8,6 +9,8 @@ export const TransactionContext = createContext(null);
 export const TransactionProvider = ({ children }) => {
     const [transactions, setTransactions] = useState([]);
     const [allTransactions, setAllTransactions] = useState([]);
+    const [balanceTransactions, setBalanceTransactions] = useState([]);
+    const [transfers, setTransfers] = useState([]);
     const [categorySummary, setCategorySummary] = useState([]);
     const [loading, setLoading] = useState(false);
     const [filters, setFilters] = useState({
@@ -37,12 +40,28 @@ export const TransactionProvider = ({ children }) => {
             // Also fetch all transactions for dashboard stats
             const allData = await transactionAPI.getTransactions({});
             setAllTransactions(allData);
+
+            // Fetch legacy-inclusive transactions for balance computation only (kept out of UI).
+            const balanceData = await transactionAPI.getTransactions({ includeTransfers: true });
+            setBalanceTransactions(balanceData);
         } catch (error) {
             console.error('Error fetching transactions:', error);
         } finally {
             setLoading(false);
         }
     }, [filters.category, filters.division, filters.from, filters.to]);
+
+    const fetchTransfers = useCallback(async () => {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+
+        try {
+            const data = await transferAPI.getTransfers({});
+            setTransfers(data);
+        } catch (error) {
+            console.error('Error fetching transfers:', error);
+        }
+    }, []);
 
     const fetchCategorySummary = useCallback(async () => {
         const token = localStorage.getItem('token');
@@ -64,8 +83,9 @@ export const TransactionProvider = ({ children }) => {
         const token = localStorage.getItem('token');
         if (token) {
             fetchTransactions();
+            fetchTransfers();
         }
-    }, [fetchTransactions, isAuthenticated]);
+    }, [fetchTransactions, fetchTransfers, isAuthenticated]);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -84,25 +104,31 @@ export const TransactionProvider = ({ children }) => {
 
     const updateTransaction = useCallback(async (id, transactionData) => {
         const data = await transactionAPI.updateTransaction(id, transactionData);
-        setTransactions(prev => prev.map(t => t._id === id ? data : t));
-        setAllTransactions(prev => prev.map(t => t._id === id ? data : t));
-        fetchCategorySummary();
-        return data;
-    }, [fetchCategorySummary]);
-
-    const deleteTransaction = useCallback(async (id) => {
-        await transactionAPI.deleteTransaction(id);
-        setTransactions(prev => prev.filter(t => t._id !== id));
-        setAllTransactions(prev => prev.filter(t => t._id !== id));
-        fetchCategorySummary();
-    }, [fetchCategorySummary]);
-
-    const transferBetweenAccounts = useCallback(async (transferData) => {
-        const data = await transactionAPI.transferBetweenAccounts(transferData);
-        fetchTransactions();
+        await fetchTransactions();
         fetchCategorySummary();
         return data;
     }, [fetchTransactions, fetchCategorySummary]);
+
+    const deleteTransaction = useCallback(async (id) => {
+        await transactionAPI.deleteTransaction(id);
+        await fetchTransactions();
+        fetchCategorySummary();
+    }, [fetchTransactions, fetchCategorySummary]);
+
+    const transferBetweenAccounts = useCallback(async (transferData) => {
+        const data = await transferAPI.createTransfer(transferData);
+        await fetchTransfers();
+        await fetchTransactions();
+        fetchCategorySummary();
+        return data;
+    }, [fetchTransfers, fetchTransactions, fetchCategorySummary]);
+
+    const deleteTransfer = useCallback(async (id) => {
+        await transferAPI.deleteTransfer(id);
+        await fetchTransfers();
+        await fetchTransactions();
+        fetchCategorySummary();
+    }, [fetchTransfers, fetchTransactions, fetchCategorySummary]);
 
     const updateFilters = useCallback((newFilters) => {
         setFilters(prev => ({ ...prev, ...newFilters }));
@@ -148,7 +174,7 @@ export const TransactionProvider = ({ children }) => {
     }, [allTransactions, dashboardFilter]);
 
     const getAccountBalances = useCallback(() => {
-        if (!allTransactions || allTransactions.length === 0) {
+        if ((!balanceTransactions || balanceTransactions.length === 0) && (!transfers || transfers.length === 0)) {
             return {
                 Cash: 0,
                 Bank: 0,
@@ -162,7 +188,8 @@ export const TransactionProvider = ({ children }) => {
             Wallet: 0
         };
 
-        allTransactions.forEach(transaction => {
+        // Base balances from income/expense transactions (including legacy transfers stored as transactions).
+        balanceTransactions.forEach(transaction => {
             const account = transaction.account || 'Cash';
             if (transaction.type === 'income') {
                 balances[account] += transaction.amount;
@@ -171,12 +198,23 @@ export const TransactionProvider = ({ children }) => {
             }
         });
 
+        // Apply dedicated transfer documents (new system)
+        transfers.forEach(t => {
+            const from = t.fromAccount;
+            const to = t.toAccount;
+            const amount = Number(t.amount) || 0;
+            if (from && balances[from] !== undefined) balances[from] -= amount;
+            if (to && balances[to] !== undefined) balances[to] += amount;
+        });
+
         return balances;
-    }, [allTransactions]);
+    }, [balanceTransactions, transfers]);
 
     const value = useMemo(() => ({
         transactions,
         allTransactions,
+        balanceTransactions,
+        transfers,
         categorySummary,
         loading,
         filters,
@@ -188,12 +226,16 @@ export const TransactionProvider = ({ children }) => {
         updateTransaction,
         deleteTransaction,
         transferBetweenAccounts,
+        deleteTransfer,
         fetchTransactions,
+        fetchTransfers,
         getStats,
         getAccountBalances
     }), [
         transactions,
         allTransactions,
+        balanceTransactions,
+        transfers,
         categorySummary,
         loading,
         filters,
@@ -204,7 +246,9 @@ export const TransactionProvider = ({ children }) => {
         updateTransaction,
         deleteTransaction,
         transferBetweenAccounts,
+        deleteTransfer,
         fetchTransactions,
+        fetchTransfers,
         getStats,
         getAccountBalances
     ]);

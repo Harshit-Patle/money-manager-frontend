@@ -8,6 +8,7 @@ export const transactionAPI = {
     if (filters.division) params.append('division', filters.division);
     if (filters.from) params.append('from', filters.from);
     if (filters.to) params.append('to', filters.to);
+    if (filters.includeTransfers) params.append('includeTransfers', 'true');
 
     const response = await axiosInstance.get(`/transactions?${params.toString()}`);
     return response.data;

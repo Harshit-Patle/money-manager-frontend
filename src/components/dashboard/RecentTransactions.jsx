@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useTransactions } from '../../hooks/useTransactions';
 import { getDateRangeForFilter } from '../../utils/date';
-import { ClockIcon, ArrowTrendingUpIcon, ArrowTrendingDownIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+import { ClockIcon, ArrowTrendingUpIcon, ArrowTrendingDownIcon, ArrowsRightLeftIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import { format } from 'date-fns';
 
 const RecentTransactions = () => {
@@ -20,8 +20,46 @@ const RecentTransactions = () => {
             return date >= dateRange.from && date <= dateRange.to;
         });
 
+        const byTransferId = new Map();
+        const result = [];
+
+        for (const t of filtered) {
+            if (t?.category === 'Transfer' && t?.transferId) {
+                const key = String(t.transferId);
+                const existing = byTransferId.get(key) || [];
+                existing.push(t);
+                byTransferId.set(key, existing);
+            } else {
+                result.push(t);
+            }
+        }
+
+        for (const [transferId, items] of byTransferId.entries()) {
+            const expenseSide = items.find(i => i.type === 'expense');
+            const incomeSide = items.find(i => i.type === 'income');
+            const primary = expenseSide || incomeSide || items[0];
+            const createdAt = items.reduce((max, cur) => {
+                const d = new Date(cur.createdAt);
+                return d > max ? d : max;
+            }, new Date(0));
+
+            result.push({
+                _id: primary._id,
+                transferId,
+                __isTransfer: true,
+                type: 'transfer',
+                amount: primary.amount,
+                category: 'Transfer',
+                division: primary.division,
+                description: primary.description,
+                fromAccount: expenseSide?.account,
+                toAccount: incomeSide?.account,
+                createdAt: createdAt.toISOString(),
+            });
+        }
+
         // Sort by date (most recent first)
-        return filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        return result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     };
 
     const allFilteredTransactions = getFilteredTransactions();
@@ -59,7 +97,8 @@ const RecentTransactions = () => {
 
             <div className="space-y-2">
                 {transactions.map((transaction) => {
-                    const isIncome = transaction.type === 'income';
+                    const isTransfer = transaction.__isTransfer === true || transaction.type === 'transfer';
+                    const isIncome = !isTransfer && transaction.type === 'income';
 
                     return (
                         <div
@@ -67,9 +106,15 @@ const RecentTransactions = () => {
                             className="flex items-center justify-between p-3 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors border border-neutral-100 dark:border-neutral-700"
                         >
                             <div className="flex items-center gap-3 flex-1 min-w-0">
-                                <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${isIncome ? 'bg-success-50' : 'bg-danger-50'
+                                <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${isTransfer
+                                    ? 'bg-primary-50 dark:bg-primary-900/20'
+                                    : isIncome
+                                        ? 'bg-success-50'
+                                        : 'bg-danger-50'
                                     }`}>
-                                    {isIncome ? (
+                                    {isTransfer ? (
+                                        <ArrowsRightLeftIcon className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                                    ) : isIncome ? (
                                         <ArrowTrendingUpIcon className="w-5 h-5 text-success-600" />
                                     ) : (
                                         <ArrowTrendingDownIcon className="w-5 h-5 text-danger-600" />
@@ -91,7 +136,11 @@ const RecentTransactions = () => {
                                         <div className="flex flex-wrap items-center gap-x-2 gap-y-1 min-w-0">
                                             <span className="truncate max-w-[12rem]">{transaction.division || 'General'}</span>
                                             <span className="hidden sm:inline">•</span>
-                                            <span className="truncate max-w-[12rem]">{transaction.account || 'Cash'}</span>
+                                            {isTransfer ? (
+                                                <span className="truncate max-w-[12rem]">{(transaction.fromAccount || '—')} → {(transaction.toAccount || '—')}</span>
+                                            ) : (
+                                                <span className="truncate max-w-[12rem]">{transaction.account || 'Cash'}</span>
+                                            )}
                                         </div>
                                         <span className="hidden sm:inline">•</span>
                                         <span className="flex-shrink-0">{format(new Date(transaction.createdAt), 'MMM dd, yyyy')}</span>
@@ -100,9 +149,15 @@ const RecentTransactions = () => {
                             </div>
 
                             <div className="text-right flex-shrink-0 ml-3">
-                                <p className={`text-sm sm:text-base font-semibold ${isIncome ? 'text-success-600' : 'text-danger-600'
+                                <p className={`text-sm sm:text-base font-semibold ${isTransfer
+                                    ? 'text-primary-600 dark:text-primary-400'
+                                    : isIncome
+                                        ? 'text-success-600'
+                                        : 'text-danger-600'
                                     }`}>
-                                    {isIncome ? '+' : '-'}₹{transaction.amount.toLocaleString('en-IN')}
+                                    {isTransfer
+                                        ? `₹${transaction.amount.toLocaleString('en-IN')}`
+                                        : `${isIncome ? '+' : '-'}₹${transaction.amount.toLocaleString('en-IN')}`}
                                 </p>
                             </div>
                         </div>
