@@ -41,26 +41,26 @@ The Money Manager frontend provides an intuitive user interface for tracking inc
 
 ### User Experience
 - **Responsive Design**: Optimized layouts for mobile, tablet, and desktop
-- **Dark/Light Theme**: Toggle between themes with persistent preference
+- **Dark/Light Theme**: Defaults to the device/system theme on first visit, then persists the user’s selected preference
 - **Loading States**: Smooth loaders and transitions for better UX
 - **Form Validation**: Client-side validation with helpful error messages
 
 ### Account Management
 - **User Authentication**: Secure login and registration system
-- **Transfer Feature**: Transfer funds between accounts with transaction logging
+- **Transfer Feature**: Transfer funds between accounts (tracked as Transfer records)
 - **Protected Routes**: Automatic redirection for authenticated/unauthenticated users
 
 ## 🛠️ Tech Stack
 
-- **Framework**: React 18.2
-- **Routing**: React Router DOM 6.20
-- **Styling**: Tailwind CSS 3.3
-- **HTTP Client**: Axios 1.6
-- **Charts**: Recharts 2.10
-- **Icons**: Heroicons 2.1
-- **UI Components**: Headless UI 1.7
-- **Date Handling**: date-fns 3.0
-- **Build Tool**: Vite 5.0
+- **Framework**: React
+- **Routing**: React Router DOM
+- **Styling**: Tailwind CSS
+- **HTTP Client**: Axios
+- **Charts**: Recharts
+- **Icons**: Heroicons
+- **UI Components**: Headless UI
+- **Date Handling**: date-fns
+- **Build Tool**: Vite
 - **Language**: JavaScript (ES6+)
 
 ## 🔐 Environment Variables
@@ -114,7 +114,7 @@ VITE_API_URL=https://your-backend-domain.com/api
 
 ## 🚀 Final Commit Hash
 
-**Frontend Final Implementation Commit**: `06e660b24fd44789ec7031a5bea8c35b3ca67d44`
+**Frontend Final Implementation Commit**: `2f4607a1d27a39cdd971d6abf2913828bc37465d`
 
 > **Note**: Any commits after the above hash are documentation-only updates and do not affect the application's functionality. These commits may include README updates, comment additions, or other non-code documentation improvements.
 
