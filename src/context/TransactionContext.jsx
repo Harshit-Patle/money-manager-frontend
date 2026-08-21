@@ -1,12 +1,14 @@
 import { createContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { transactionAPI } from '../api/transaction.api';
 import { transferAPI } from '../api/transfer.api';
+import { useAuth } from '../hooks/useAuth';
 import { getDateRangeForFilter } from '../utils/date';
 import { DATE_FILTERS } from '../utils/constants';
 
 export const TransactionContext = createContext(null);
 
 export const TransactionProvider = ({ children }) => {
+    const { isAuthenticated } = useAuth();
     const [transactions, setTransactions] = useState([]);
     const [allTransactions, setAllTransactions] = useState([]);
     const [balanceTransactions, setBalanceTransactions] = useState([]);
@@ -20,17 +22,9 @@ export const TransactionProvider = ({ children }) => {
         to: ''
     });
     const [dashboardFilter, setDashboardFilter] = useState(DATE_FILTERS.MONTHLY);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-    // Check authentication status
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        setIsAuthenticated(!!token);
-    }, []);
 
     const fetchTransactions = useCallback(async () => {
-        const token = localStorage.getItem('token');
-        if (!token) return; // Don't fetch if not authenticated
+        if (!isAuthenticated) return;
 
         setLoading(true);
         try {
@@ -49,11 +43,10 @@ export const TransactionProvider = ({ children }) => {
         } finally {
             setLoading(false);
         }
-    }, [filters.category, filters.division, filters.from, filters.to]);
+    }, [isAuthenticated, filters.category, filters.division, filters.from, filters.to]);
 
     const fetchTransfers = useCallback(async () => {
-        const token = localStorage.getItem('token');
-        if (!token) return;
+        if (!isAuthenticated) return;
 
         try {
             const data = await transferAPI.getTransfers({});
@@ -61,11 +54,10 @@ export const TransactionProvider = ({ children }) => {
         } catch (error) {
             console.error('Error fetching transfers:', error);
         }
-    }, []);
+    }, [isAuthenticated]);
 
     const fetchCategorySummary = useCallback(async () => {
-        const token = localStorage.getItem('token');
-        if (!token) return; // Don't fetch if not authenticated
+        if (!isAuthenticated) return;
 
         try {
             const dateRange = getDateRangeForFilter(dashboardFilter);
@@ -77,22 +69,22 @@ export const TransactionProvider = ({ children }) => {
         } catch (error) {
             console.error('Error fetching category summary:', error);
         }
-    }, [dashboardFilter]);
+    }, [isAuthenticated, dashboardFilter]);
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
+        if (isAuthenticated) {
             fetchTransactions();
             fetchTransfers();
-        }
-    }, [fetchTransactions, fetchTransfers, isAuthenticated]);
-
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
             fetchCategorySummary();
+        } else {
+            // Reset state on logout
+            setTransactions([]);
+            setAllTransactions([]);
+            setBalanceTransactions([]);
+            setTransfers([]);
+            setCategorySummary([]);
         }
-    }, [fetchCategorySummary, isAuthenticated]);
+    }, [isAuthenticated, fetchTransactions, fetchTransfers, fetchCategorySummary]);
 
     const addTransaction = useCallback(async (transactionData) => {
         const data = await transactionAPI.addTransaction(transactionData);
