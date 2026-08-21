@@ -1,125 +1,150 @@
-# Money Manager – Frontend
+# Money Manager – Frontend Client 📊
 
-A modern, responsive web application for managing personal and business finances with real-time analytics, transaction tracking, and comprehensive filtering capabilities.
+A modern, responsive Single Page Application (SPA) for personal and business finance tracking, real-time analytics, and multi-account transfers. Built with React 18, Vite, and Tailwind CSS, and deployed to Vercel Edge CDN.
+
+---
 
 ## 🔗 Links
 
-- **Live Application**: [https://money-manager-frontend-six.vercel.app](https://money-manager-frontend-six.vercel.app)
+- **Live Application (Vercel)**: [https://moneymanager-harshit.vercel.app](https://moneymanager-harshit.vercel.app)
 - **Backend Repository**: [https://github.com/Harshit-Patle/money-manager-backend](https://github.com/Harshit-Patle/money-manager-backend)
 
-## 📝 Description
+---
 
-The Money Manager frontend provides an intuitive user interface for tracking income and expenses with powerful analytics and visualization features. Built with React and styled with Tailwind CSS, it offers seamless interaction with financial data through interactive dashboards, smart filtering, and responsive design.
+## 📌 Overview & Problem Statement
 
-**Key Capabilities:**
-- Visual dashboard with income/expense analytics
-- Real-time transaction management with modal-based forms
-- Advanced filtering by date range, categories, and divisions
-- Historical transaction views with edit capabilities
-- Category-wise spending summaries with charts
-- Fully responsive design for mobile and desktop
+Managing finances across personal expenses and office budgets often becomes chaotic when using static spreadsheets or generic apps that lack categorical breakdowns and account transfer visibility.
 
-## ✨ Features
+**Money Manager Client** delivers an interactive, accessible dashboard allowing users to:
+1. View dynamic financial summaries and cash flow trends.
+2. Filter transactions simultaneously by date range, category, and division.
+3. Manage multi-account fund movements (**Cash**, **Bank**, **Wallet**).
+4. Experience instant, reactive UI updates without full page reloads.
 
-### Dashboard & Analytics
-- **Interactive Dashboard**: View financial overview with month-wise, weekly, and yearly income/expense breakdowns
-- **Visual Charts**: Dynamic charts powered by Recharts for income vs expense trends
-- **Category Summary**: Pie charts and statistics showing spending distribution across categories
-- **Quick Stats**: Real-time cards displaying total income, expenses, and balance
+---
 
-### Transaction Management
-- **Add Transaction Modal**: Two-tab interface for adding income and expenses with date, time, description, and category
-- **Transaction History**: Comprehensive list of all transactions with sorting and filtering
-- **Edit Capability**: Modify transactions within 12 hours of creation (auto-locked after)
-- **Category Organization**: Predefined categories (Food, Fuel, Medical, Movie, Loan, etc.) with Office/Personal divisions
+## 🏗️ High-Level Architecture
 
-### Filtering & Search
-- **Date Range Filter**: Filter transactions between any two dates
-- **Category Filter**: Filter by specific spending categories
-- **Division Filter**: Separate Office and Personal transactions
-- **Combined Filters**: Apply multiple filters simultaneously for precise data views
+```mermaid
+graph TD
+    User([User Browser]) -->|React 18 SPA on Vercel CDN| SPA[React Router DOM v6 AppRoutes]
+    SPA --> AuthCtx[AuthContext: Token & Session State]
+    SPA --> TxCtx[TransactionContext: Reactive Ledger & Summary State]
+    SPA --> ThemeCtx[ThemeContext: Light/Dark Mode Persistence]
+    
+    TxCtx -->|Axios with JWT Bearer Interceptors| API[AWS Lambda API Gateway Endpoint]
+    API --> Backend[(MongoDB Atlas)]
+```
 
-### User Experience
-- **Responsive Design**: Optimized layouts for mobile, tablet, and desktop
-- **Dark/Light Theme**: Defaults to the device/system theme on first visit, then persists the user’s selected preference
-- **Loading States**: Smooth loaders and transitions for better UX
-- **Form Validation**: Client-side validation with helpful error messages
+---
 
-### Account Management
-- **User Authentication**: Secure login and registration system
-- **Transfer Feature**: Transfer funds between accounts (tracked as Transfer records)
-- **Protected Routes**: Automatic redirection for authenticated/unauthenticated users
+## ✨ Key Features
 
-## 🛠️ Tech Stack
+### 1. Interactive Dashboard & Visualizations
+- **Summary Cards**: Real-time totals for Total Income, Total Expenses, and Net Balance.
+- **Trend Charts**: Interactive bar and area charts (powered by Recharts) comparing monthly, weekly, and custom date ranges.
+- **Dynamic Category Summary**: Synchronized pie charts and percentage distributions that reactively adapt to active filter criteria.
 
-- **Framework**: React
-- **Routing**: React Router DOM
-- **Styling**: Tailwind CSS
-- **HTTP Client**: Axios
-- **Charts**: Recharts
-- **Icons**: Heroicons
-- **UI Components**: Headless UI
-- **Date Handling**: date-fns
-- **Build Tool**: Vite
-- **Language**: JavaScript (ES6+)
+### 2. Transaction Management
+- **Modal Entry Forms**: Two-tab modal interface for recording income and expense records with category tagging, account selection, and division.
+- **12-Hour Editable Indicator**: Visual badges indicating whether a transaction is within its 12-hour edit window or locked.
+- **Inline Actions**: Quick edit and delete triggers with confirmation dialogs.
+
+### 3. Multi-Account Transfers
+- **Dedicated Transfer Portal**: Inter-account fund transfers (e.g., Bank $\to$ Wallet) with validation preventing same-account selections.
+- **Transfer Ledger**: Tabular transfer history tracking date, division, and timestamps.
+
+### 4. UX & Responsive Design
+- **Route Code Splitting**: Asynchronously loads page components (`React.lazy` + `Suspense`) to minimize initial bundle size (~234 kB).
+- **Theme Persistence**: Light and Dark mode toggle with system preference detection and `localStorage` persistence.
+- **Client Route Guards**: Protected and Public route wrappers (`ProtectedRoute`, `PublicRoute`) guarding authenticated views.
+
+---
+
+## 🛠️ Actual Tech Stack
+
+| Layer | Technology | Purpose |
+|---|---|---|
+| **Framework & Build** | React 18 & Vite 5 | Core UI framework and ultra-fast module bundler |
+| **Styling** | Tailwind CSS 3.3 | Utility-first responsive design system |
+| **Routing** | React Router DOM v6 | SPA navigation with v7 future flag compatibility |
+| **HTTP Client** | Axios | Centralized client with JWT request/response interceptors |
+| **Data Visualization** | Recharts | Responsive SVG charts and category pie breakdowns |
+| **UI Components** | Headless UI & Heroicons | Accessible dialog modals, dropdowns, and SVG icons |
+| **Date Manipulation** | date-fns | Date calculations, formatting, and boundary ranges |
+| **Hosting & CDN** | Vercel | Global edge hosting with `vercel.json` SPA rewrites |
+
+---
+
+## 🧠 Important Technical Decisions
+
+1. **Reactive Auth-State Synchronization**:
+   - `TransactionContext` directly consumes `useAuth()`. When authentication changes, transaction data and category summaries are fetched automatically, and all state arrays are reset upon logout—eliminating `window.location.reload()` hacks.
+
+2. **Route-Level Code Splitting**:
+   - Implemented `React.lazy()` and `<Suspense>` across `Login`, `Register`, `Home`, `Dashboard`, and `TransferPage`, reducing initial bundle size by over 65%.
+
+3. **SPA Routing via `vercel.json`**:
+   - Configured rewrite rules in [`vercel.json`](file:///vercel.json) to redirect all subroutes to `/index.html`, eliminating 404 errors on browser refresh.
+
+---
 
 ## 🔐 Environment Variables
 
-The application requires the following environment variable:
+Configured via `.env` (template provided in [`.env.example`](file:///.env.example)):
 
-```
-VITE_API_URL
-```
+| Variable | Description | Example / Format |
+|---|---|---|
+| `VITE_API_URL` | Base URL of the backend API | `http://localhost:5000/api` (local) or `https://<api-id>.execute-api.<region>.amazonaws.com/api` (prod) |
 
-**Format**: The variable should contain the full base URL of the backend API including `/api` path.
+---
 
-**Example structure**:
-```
-VITE_API_URL=https://your-backend-domain.com/api
-```
-
-## 📦 Installation & Setup
+## 📦 Local Run Instructions
 
 ### Prerequisites
-- Node.js (v18 or higher recommended)
+- Node.js (v18 or v20+)
 - npm or yarn package manager
 
 ### Steps
-
-1. **Clone the repository**
+1. **Clone the repository**:
    ```bash
    git clone https://github.com/Harshit-Patle/money-manager-frontend.git
    cd money-manager-frontend
    ```
 
-2. **Install dependencies**
+2. **Install dependencies**:
    ```bash
    npm install
    ```
 
-3. **Configure environment variables**
-   
-   Create a `.env` file in the root directory and add:
-   ```
-   VITE_API_URL=your_backend_api_url
+3. **Configure environment**:
+   ```bash
+   cp .env.example .env
+   # Ensure VITE_API_URL points to your local backend (http://localhost:5000/api)
    ```
 
-4. **Run the development server**
+4. **Start Vite development server**:
    ```bash
    npm run dev
    ```
+   Open `http://localhost:5173` in your browser.
 
-   The application will be available at `http://localhost:5173`
+5. **Build for production**:
+   ```bash
+   npm run build
+   ```
 
+---
 
-## 🚀 Final Commit Hash
+## 👤 Pre-Seeded Demo Account
 
-**Frontend Final Implementation Commit**: `2f4607a1d27a39cdd971d6abf2913828bc37465d`
+| Email | Password | Access |
+|---|---|---|
+| `demo.user@moneymanager.com` | `Password@123` | Pre-populated with income, expense, and transfer records |
 
-> **Note**: Any commits after the above hash are documentation-only updates and do not affect the application's functionality. These commits may include README updates, comment additions, or other non-code documentation improvements.
+---
 
-## 📋 Submission Details
+## ⚠️ Known Limitations
 
-Complete submission information including the project description, live deployed URLs,
-GitHub repository links, demo video link, and final commit hashes is provided in
-`submission-details.txt` located in the root of this repository.
+- **Browser Storage Dependency**: Authentication tokens and theme preferences rely on browser `localStorage`.
+- **Backend Cold Start Timing**: When connected to serverless backend endpoints, initial requests after inactivity may take a few seconds during container warm-up.
