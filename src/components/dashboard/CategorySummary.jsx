@@ -4,23 +4,23 @@ import { useTransactions } from '../../hooks/useTransactions';
 const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4', '#84cc16', '#f97316', '#6366f1'];
 
 const CategorySummary = () => {
-    const { allTransactions = [] } = useTransactions();
+    const { transactions = [] } = useTransactions();
 
     // Calculate category data from expense transactions only
     const getCategoryData = () => {
-        if (!allTransactions || allTransactions.length === 0) {
+        if (!transactions || transactions.length === 0) {
             return [];
         }
 
         const categoryMap = {};
 
-        allTransactions.forEach(t => {
+        transactions.forEach(t => {
             // Only include expense transactions
             if (t.type === 'expense') {
                 if (!categoryMap[t.category]) {
                     categoryMap[t.category] = { name: t.category, value: 0 };
                 }
-                categoryMap[t.category].value += t.amount;
+                categoryMap[t.category].value += Number(t.amount) || 0;
             }
         });
 

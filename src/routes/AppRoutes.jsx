@@ -1,21 +1,25 @@
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import Loader from '../components/common/Loader';
-import Login from '../pages/Login';
-import Register from '../pages/Register';
-import Home from '../pages/Home';
-import Dashboard from '../pages/Dashboard';
-import TransferPage from '../pages/TransferPage';
+
+const Login = lazy(() => import('../pages/Login'));
+const Register = lazy(() => import('../pages/Register'));
+const Home = lazy(() => import('../pages/Home'));
+const Dashboard = lazy(() => import('../pages/Dashboard'));
+const TransferPage = lazy(() => import('../pages/TransferPage'));
+
+const PageLoader = () => (
+    <div className="min-h-screen flex items-center justify-center">
+        <Loader size="lg" text="Loading..." />
+    </div>
+);
 
 const ProtectedRoute = ({ children }) => {
     const { isAuthenticated, loading } = useAuth();
 
     if (loading) {
-        return (
-            <div className="min-h-screen flex items-center justify-center">
-                <Loader size="lg" text="Loading..." />
-            </div>
-        );
+        return <PageLoader />;
     }
 
     return isAuthenticated ? children : <Navigate to="/login" />;
@@ -25,11 +29,7 @@ const PublicRoute = ({ children }) => {
     const { isAuthenticated, loading } = useAuth();
 
     if (loading) {
-        return (
-            <div className="min-h-screen flex items-center justify-center">
-                <Loader size="lg" text="Loading..." />
-            </div>
-        );
+        return <PageLoader />;
     }
 
     return !isAuthenticated ? children : <Navigate to="/home" />;
@@ -38,7 +38,8 @@ const PublicRoute = ({ children }) => {
 const AppRoutes = () => {
     return (
         <BrowserRouter>
-            <Routes>
+            <Suspense fallback={<PageLoader />}>
+                <Routes>
                 <Route
                     path="/login"
                     element={
@@ -82,8 +83,9 @@ const AppRoutes = () => {
                 <Route path="/" element={<Navigate to="/home" />} />
                 <Route path="*" element={<Navigate to="/home" />} />
             </Routes>
-        </BrowserRouter>
-    );
+        </Suspense>
+    </BrowserRouter>
+);
 };
 
 export default AppRoutes;
